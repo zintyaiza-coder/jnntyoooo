@@ -11,18 +11,15 @@
 
     <canvas id="magic-canvas"></canvas>
 
-    <!-- Lapisan Lampion Harapan yang Berterbangan di Ending -->
+    <!-- Lapisan Lampion Harapan yang Terbang di Ending -->
     <div class="sky-lanterns-layer" id="sky-lanterns-layer"></div>
 
-    <!-- Dua Lagu: isi src="..." sesuai nama file MP3-mu di folder yang sama -->
-    <audio id="audio-celebrate" loop>
-        <!-- <source src="semua-aku-dirayakan.mp3" type="audio/mpeg"> -->
-    </audio>
-    <audio id="audio-bertaut" loop>
-        <!-- <source src="bertaut.mp3" type="audio/mpeg"> -->
+    <!-- Lagu Khusus Step Akhir (lagu1.mp3 di GitHub) -->
+    <audio id="audio-ending" loop preload="auto">
+        <source src="lagu1.mp3" type="audio/mpeg">
     </audio>
 
-    <button class="music-pill" id="music-toggle" onclick="handleMusic()">🎵 Lagu: Siap Diputar</button>
+    <button class="music-pill hidden" id="music-toggle" onclick="handleMusic()">🎵 lagu1.mp3</button>
 
     <!-- Dunia & Pemandangan -->
     <div class="world-bg" id="world-bg">
@@ -30,6 +27,26 @@
         <div class="sun-moon"></div>
         <div class="cloud c1"></div>
         <div class="cloud c2"></div>
+    </div>
+
+    <!-- Siluet Pohon Harapan di Latar Belakang Mode Malam (Ending) -->
+    <div class="night-tree-backdrop" id="night-tree-backdrop" aria-hidden="true">
+        <svg viewBox="0 0 360 320" width="360" height="320">
+            <circle cx="180" cy="125" r="115" fill="rgba(255, 209, 102, 0.08)"/>
+            <path d="M150 305 Q162 220 146 162 L214 162 Q198 220 210 305 Z" fill="#2A1F3D"/>
+            <path d="M160 196 L102 136 M200 192 L258 134" stroke="#2A1F3D" stroke-width="15" stroke-linecap="round"/>
+            <circle cx="180" cy="110" r="86" fill="rgba(45, 92, 98, 0.55)"/>
+            <circle cx="114" cy="130" r="62" fill="rgba(56, 114, 112, 0.5)"/>
+            <circle cx="246" cy="130" r="62" fill="rgba(56, 114, 112, 0.5)"/>
+            <circle cx="144" cy="74" r="58" fill="rgba(72, 138, 130, 0.48)"/>
+            <circle cx="216" cy="74" r="58" fill="rgba(72, 138, 130, 0.48)"/>
+            <!-- Bintang kecil di tajuk pohon malam -->
+            <circle cx="135" cy="95" r="3.5" fill="#FFD166" class="tree-ember"/>
+            <circle cx="215" cy="88" r="3" fill="#FF8FA3" class="tree-ember"/>
+            <circle cx="178" cy="65" r="4" fill="#FFF3B0" class="tree-ember"/>
+            <circle cx="110" cy="138" r="3" fill="#90E0EF" class="tree-ember"/>
+            <circle cx="245" cy="132" r="3.5" fill="#FFD166" class="tree-ember"/>
+        </svg>
     </div>
 
     <div class="hills">
@@ -46,11 +63,11 @@
         <span class="flower-item" style="animation-delay: 1.5s;">🌸</span>
     </div>
 
-    <!-- Dua Karakter Anak di Sebelah Kiri Bawah (Berdiri Menemani & Melihat Lampion) -->
+    <!-- Dua Karakter Anak di Sisi Kiri Bawah -->
     <div class="companions-dock" id="companions-dock" onclick="cheerCharacter()" title="Klik teman-temanmu!">
         <!-- Anak 1: Memegang Balon -->
         <div class="char-unit char-balloon">
-            <svg viewBox="0 0 175 215" width="136" height="168">
+            <svg viewBox="0 0 175 215" width="128" height="158">
                 <g class="balloon-float">
                     <path d="M35 72 Q28 106 38 136" stroke="#FFF9DB" stroke-width="2" fill="none"/>
                     <ellipse cx="34" cy="42" rx="24" ry="29" fill="#FF6B8B"/>
@@ -95,7 +112,7 @@
 
         <!-- Anak 2: Membawa Permen Lolipop -->
         <div class="char-unit char-candy">
-            <svg viewBox="0 0 175 215" width="132" height="164">
+            <svg viewBox="0 0 175 215" width="124" height="154">
                 <circle cx="80" cy="122" r="54" fill="rgba(144, 224, 239, 0.16)"/>
                 <rect x="63" y="170" width="11" height="26" rx="5.5" fill="#FFD1AA"/>
                 <rect x="86" y="170" width="11" height="26" rx="5.5" fill="#FFD1AA"/>
@@ -134,27 +151,31 @@
             </svg>
         </div>
 
-        <div class="buddy-bubble" id="buddy-note">🎈 Aku bawa balon & temanku bawa permen buat nemenin kamu!</div>
+        <!-- Kolom Komentar / Dialog Dua Karakter Anak -->
+        <div class="buddy-chat-box" id="buddy-chat-box">
+            <div class="chat-speaker" id="chat-speaker">🎈 Teman Balon</div>
+            <div class="chat-text" id="buddy-note">Hai! Kenalan dulu yuk sebelum masuk ke taman!</div>
+        </div>
     </div>
 
     <!-- Panggung Utama -->
     <div class="stage" id="main-stage">
 
-        <!-- STEP 1: KENALAN NAMA & PINTU KEJUTAN -->
+        <!-- STEP 1: KENALAN NAMA -->
         <div class="magic-card" id="step-1">
             <span class="tag-pill" id="sender-tag">DARI ANAK • UNTUK ANAK DI SELURUH DUNIA</span>
             <h1>Hai! Siapa Nama Kamu? 👋🌈</h1>
             <p class="story-text">
-                Sebelum kita masuk ke <b>Taman Ajaib Hari Anak</b>, kenalan dulu yuk! Setelah namamu masuk, lagunya akan mulai mengiringi dan namamu akan ikut terbang bersama lampion harapan.
+                Tulis nama panggilanmu dulu ya, lalu ketuk kadonya untuk membuka pintu <b>Taman Ajaib Hari Anak</b>!
             </p>
 
             <div class="name-box">
-                <input type="text" class="wish-field name-input" id="user-name-input" placeholder="Tulis nama panggilanmu di sini..." maxlength="24" oninput="reactTyping()">
+                <input type="text" class="wish-field name-input" id="user-name-input" placeholder="Tulis nama panggilanmu..." maxlength="24" oninput="reactTyping()">
             </div>
 
             <button class="gift-trigger" onclick="startJourney()" aria-label="Buka Kado">🎁</button>
-            <p style="font-size: 0.85rem; font-weight: 800; opacity: 0.78;">Isi namamu lalu ketuk kadonya untuk mulai ✨</p>
-            <div class="sender-note" id="sender-footer">Dibuat dengan penuh cinta dari sesama anak untuk anak-anak hebat 💛</div>
+            <p class="hint-sub">Ketuk kado di atas untuk mulai ✨</p>
+            <div class="sender-note" id="sender-footer">Dibuat dengan penuh cinta dari sesama anak 💛</div>
         </div>
 
         <!-- STEP 2: PESAN HANGAT DARI ANAK KE ANAK -->
@@ -164,86 +185,88 @@
             <p class="story-text" id="voice-quote"></p>
             <div class="btn-row">
                 <button class="btn-magic btn-ocean" onclick="cycleQuote()">💌 Pesan Lainnya</button>
-                <button class="btn-magic btn-meadow" onclick="openTreeStep()">🌳 Ke Pohon Harapan</button>
+                <button class="btn-magic btn-meadow" onclick="openTreeStep()">🌳 Lanjut ke Pohon</button>
             </div>
-            <div class="sender-note">Dari anak untuk anak • Hari ini kamu dirayakan 🎈</div>
+            <div class="sender-note">Hari ini milikmu • Teruslah bersinar 🎈</div>
         </div>
 
-        <!-- STEP 3: POHON HARAPAN AJAIB -->
-        <div class="magic-card hidden" id="step-3">
+        <!-- STEP 3: POHON HARAPAN AJAIB (Layout Luas & Leluasa) -->
+        <div class="magic-card tree-wide-card hidden" id="step-3">
             <span class="tag-pill">POHON HARAPAN AJAIB 🌟</span>
-            <h1 id="tree-title">Gantungkan Mimpimu! 🌳</h1>
-            <p class="story-text" style="font-size: 0.94rem; margin-bottom: 8px;">
-                Tulis satu harapanmu hari ini. Bintangnya akan bersinar di pohon, dan nanti ikut terbang membawa namamu ke langit malam!
+            <h1 id="tree-title">Pohon Harapan 🌳</h1>
+            <p class="story-text tree-subtitle">
+                Tulis satu harapan atau mimpimu hari ini, lalu gantungkan di dahan pohon!
             </p>
 
-            <div class="tree-stage">
-                <svg viewBox="0 0 330 295" width="330" height="295">
-                    <circle cx="165" cy="115" r="95" fill="#FFD166" opacity="0.18"/>
-                    <path d="M138 282 Q150 205 134 152 L196 152 Q180 205 192 282 Z" fill="#7F4F24"/>
-                    <path d="M148 182 L96 126 M182 178 L234 124" stroke="#7F4F24" stroke-width="14" stroke-linecap="round"/>
-                    <circle cx="165" cy="100" r="78" fill="#57CC99"/>
-                    <circle cx="105" cy="118" r="56" fill="#80ED99"/>
-                    <circle cx="225" cy="118" r="56" fill="#80ED99"/>
-                    <circle cx="132" cy="68" r="52" fill="#A7F3D0"/>
-                    <circle cx="198" cy="68" r="52" fill="#A7F3D0"/>
-                    <circle cx="115" cy="280" r="6" fill="#FF6B6B"/>
-                    <circle cx="215" cy="280" r="6" fill="#FFD166"/>
-                </svg>
+            <div class="tree-workspace">
+                <!-- Kolom Kiri: Pohon Harapan yang Lebih Luas -->
+                <div class="tree-stage">
+                    <svg viewBox="0 0 420 350" width="100%" height="100%">
+                        <circle cx="210" cy="145" r="135" fill="#FFD166" opacity="0.16" class="tree-aura"/>
+                        <path d="M176 334 Q190 245 172 182 L248 182 Q230 245 244 334 Z" fill="#7F4F24"/>
+                        <path d="M188 218 L120 152 M232 214 L300 150 M210 195 L210 128" stroke="#7F4F24" stroke-width="15" stroke-linecap="round"/>
+                        <g class="tree-canopy">
+                            <circle cx="210" cy="122" r="98" fill="#57CC99"/>
+                            <circle cx="132" cy="146" r="72" fill="#80ED99"/>
+                            <circle cx="288" cy="146" r="72" fill="#80ED99"/>
+                            <circle cx="166" cy="82" r="68" fill="#A7F3D0"/>
+                            <circle cx="254" cy="82" r="68" fill="#A7F3D0"/>
+                        </g>
+                        <circle cx="145" cy="332" r="7" fill="#FF6B6B"/>
+                        <circle cx="275" cy="332" r="7" fill="#FFD166"/>
+                    </svg>
 
-                <div class="lantern-zone" id="lantern-zone">
-                    <div class="wish-lantern" style="top: 16px; left: 82px; background: #FFD166;" onclick="showLanternMsg('Semoga semua anak bisa belajar sambil tersenyum bahagia! 😊')">
-                        ⭐ Semua anak bahagia
+                    <div class="lantern-zone" id="lantern-zone">
+                        <div class="wish-lantern" style="top: 38px; left: 132px; background: #FFD166;" onclick="showLanternMsg('Semoga semua anak bisa tersenyum bahagia! 😊')">
+                            ⭐ Semua anak bahagia
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="wish-controls">
-                <input type="text" class="wish-field" id="wish-input" placeholder="Tulis harapan atau mimpimu..." maxlength="42" oninput="reactTyping()">
-                <button class="btn-magic btn-coral" onclick="addLantern()">✨ Gantung</button>
-            </div>
+                <!-- Kolom Kanan: Area Tulis & Kelola Harapan yang Lega -->
+                <div class="tree-side-panel">
+                    <label for="wish-input" class="wish-label">✨ Tulis Harapanmu di Sini:</label>
+                    <textarea class="wish-textarea" id="wish-input" rows="3" placeholder="Contoh: Semoga aku berani mengejar mimpiku dan selalu bahagia..." maxlength="65" oninput="reactTyping()"></textarea>
 
-            <div class="lantern-modal" id="lantern-modal"></div>
+                    <div class="wish-action-row">
+                        <button class="btn-magic btn-coral" onclick="addLantern()">🌟 Gantung di Pohon</button>
+                        <span class="wish-counter" id="wish-counter">1 harapan tergantung</span>
+                    </div>
 
-            <div class="btn-row" style="margin-top: 16px;">
-                <button class="btn-magic btn-berry" style="width: 100%;" onclick="prepareGrandFinale()">
-                    🏮 Terbangkan Lampion & Lihat Penutup!
-                </button>
+                    <div class="lantern-modal" id="lantern-modal">
+                        Klik bintang di pohon untuk membaca harapannya, atau tambahkan punyamu di atas! ✨
+                    </div>
+
+                    <button class="btn-magic btn-berry finale-trigger-btn" onclick="prepareGrandFinale()">
+                        ✨ Selesai & Lihat Kejutan Akhir
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- JEDA EMOSI SEBELUM ENDING -->
-        <div class="magic-card hidden" id="step-transition">
-            <span class="tag-pill">TARIK NAPAS PELAN-PELAN 🌙</span>
-            <h1>Harapanmu Sedang Disiapkan...</h1>
-            <p class="story-text" id="transition-text">
-                Langit mulai bertabur bintang, lampion-lampion disalakan, dan nadanya berubah pelan agar kita bisa merasakan kehangatan yang saling bertaut...
-            </p>
-            <div class="breathing-orb">✨🕯️✨</div>
+        <!-- SEKUENS MALAM: 3 - 2 - 1 -> SELAMAT -> HARI -> ANAK -> SEDUNIA -> HATI BERTAHAN -->
+        <div class="finale-sequence-layer hidden" id="finale-sequence">
+            <div class="countdown-word" id="sequence-word"></div>
+            <div class="heart-showcase hidden" id="heart-showcase">
+                <canvas id="heart-canvas" width="380" height="340"></canvas>
+                <div class="heart-inner-text" id="heart-inner-text">You Are Awesome!</div>
+            </div>
         </div>
 
-        <!-- STEP 4: ENDING DI SEBELAH KIRI (LANGIT & LAMPION TERLIHAT JELAS DI TENGAH-KANAN) -->
-        <div class="magic-card ending-left-card hidden" id="step-4">
+        <!-- STEP 4: ENDING RINGKAS & LEGA DI KIRI ATAS -->
+        <div class="magic-card ending-compact-card hidden" id="step-4">
             <span class="tag-pill">SELAMAT HARI ANAK SEDUNIA 🏮</span>
-            <h1 id="ending-title">Teruslah Bersinar, Sahabat! 🌟</h1>
-            <p class="story-text" id="ending-intro">
-                Lihat lampion-lampion yang terbang di langit malam—semuanya membawa doa dan mimpimu. Kamu gak sendirian, kami menemanimu di sini!
-            </p>
+            <h1 id="ending-title">Teruslah Bersinar! 🌟</h1>
+            <p class="ending-mini-hope" id="ending-hope-text"></p>
 
-            <div class="ending-hope-box">
-                <div class="ending-hope-label" id="ending-hope-label">✨ Pesan Semangat & Harapan Untukmu ✨</div>
-                <p class="ending-hope-msg" id="ending-hope-text"></p>
-            </div>
-
-            <div class="hug-box" id="hug-box"></div>
+            <div class="hug-toast" id="hug-box"></div>
 
             <div class="btn-row ending-btn-row">
                 <button class="btn-magic btn-coral" onclick="launchSkyLanternWave()">🏮 Lampion Lagi</button>
                 <button class="btn-magic btn-berry" onclick="cycleEndingHope()">✨ Harapan Lain</button>
-                <button class="btn-magic btn-meadow" onclick="sendWarmHug()">🤗 Simpan Pelukan</button>
+                <button class="btn-magic btn-meadow" onclick="sendWarmHug()">🤗 Peluk Hangat</button>
                 <button class="btn-magic btn-ocean" onclick="location.reload()">🔄 Ulangi</button>
             </div>
-            <div class="sender-note" id="ending-sender">Pelukan hangat dari sesama anak untukmu — kita bertaut dalam harapan 💫</div>
         </div>
     </div>
 
