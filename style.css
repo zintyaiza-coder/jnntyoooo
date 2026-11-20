@@ -228,6 +228,7 @@ body.night-magic .hill-front { background: #102321; }
     align-items: flex-end;
     cursor: pointer;
     user-select: none;
+    transition: transform 0.4s ease, bottom 0.4s ease, left 0.4s ease;
 }
 
 .char-balloon {
@@ -631,18 +632,40 @@ h1 {
     display: block;
 }
 
+/* Lapisan cahaya lembut di belakang kata kunang-kunang agar makin mudah terbaca */
+.word-backdrop-glow {
+    position: fixed;
+    top: 45%;
+    left: 58%;
+    transform: translate(-50%, -50%) scale(0.92);
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 700;
+    font-size: clamp(3.2rem, 7.2vw, 5.4rem);
+    color: rgba(255, 248, 231, 0.26);
+    text-shadow: 0 0 28px rgba(255, 143, 163, 0.55), 0 0 48px rgba(255, 209, 102, 0.3);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.24s ease, transform 0.3s ease;
+    white-space: nowrap;
+}
+
+.word-backdrop-glow.active-glow {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
 .heart-inner-text {
     position: fixed;
     top: 45%;
     left: 58%;
     transform: translate(-50%, -50%) scale(0.92);
-    width: 225px;
+    width: 240px;
     text-align: center;
     font-family: 'Fredoka', sans-serif;
-    font-size: 1.36rem;
+    font-size: 1.45rem;
     font-weight: 700;
     color: #FFFDF9;
-    text-shadow: 0 0 18px rgba(255, 107, 139, 0.98), 0 0 32px rgba(255, 209, 102, 0.7), 0 2px 10px rgba(0, 0, 0, 0.65);
+    text-shadow: 0 0 18px rgba(255, 107, 139, 0.98), 0 0 34px rgba(255, 209, 102, 0.75), 0 2px 10px rgba(0, 0, 0, 0.65);
     line-height: 1.25;
     opacity: 0;
     transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
@@ -761,33 +784,119 @@ h1 {
     margin-top: 3px;
 }
 
+/* Mode Otomatis Terdeteksi HP (diatur otomatis oleh JS & media query) */
+body.device-mobile .tree-workspace {
+    grid-template-columns: 1fr;
+}
+
+body.device-mobile .tree-stage {
+    height: 245px;
+}
+
+body.device-mobile.night-magic {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 54px 12px 175px;
+}
+
+body.device-mobile.night-magic .stage {
+    max-width: 100%;
+}
+
+body.device-mobile .ending-compact-card {
+    padding: 14px 15px;
+    border-radius: 22px;
+}
+
+body.device-mobile .ending-compact-card h1 {
+    font-size: 1.24rem;
+}
+
+body.device-mobile .ending-mini-hope {
+    font-size: 0.82rem;
+    margin-bottom: 10px;
+}
+
+body.device-mobile .word-backdrop-glow {
+    top: 56%;
+    left: 50%;
+    font-size: clamp(2.4rem, 11.5vw, 3.6rem);
+}
+
+body.device-mobile .heart-inner-text {
+    top: 56%;
+    left: 50%;
+    font-size: 1.08rem;
+    width: 175px;
+}
+
+body.device-mobile .companions-dock {
+    bottom: 6px;
+    left: 8px;
+    transform: scale(0.68);
+    transform-origin: bottom left;
+}
+
+body.device-mobile .buddy-chat-box {
+    width: 250px;
+    bottom: 160px;
+}
+
 @media (max-width: 768px) {
     .tree-workspace {
         grid-template-columns: 1fr;
     }
 
     .tree-stage {
-        height: 280px;
+        height: 245px;
     }
 
     body.night-magic {
-        align-items: center;
-        padding: 58px 14px 200px;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 54px 12px 175px;
     }
 
     body.night-magic .stage {
         max-width: 100%;
     }
 
+    .ending-compact-card {
+        padding: 14px 15px;
+        border-radius: 22px;
+    }
+
+    .ending-compact-card h1 {
+        font-size: 1.24rem;
+    }
+
+    .ending-mini-hope {
+        font-size: 0.82rem;
+        margin-bottom: 10px;
+    }
+
+    .word-backdrop-glow {
+        top: 56%;
+        left: 50%;
+        font-size: clamp(2.4rem, 11.5vw, 3.6rem);
+    }
+
     .heart-inner-text {
         top: 56%;
         left: 50%;
-        font-size: 1.12rem;
-        width: 185px;
+        font-size: 1.08rem;
+        width: 175px;
     }
 
     .companions-dock {
-        transform: scale(0.78);
+        bottom: 6px;
+        left: 8px;
+        transform: scale(0.68);
         transform-origin: bottom left;
+    }
+
+    .buddy-chat-box {
+        width: 250px;
+        bottom: 160px;
     }
 }
