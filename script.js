@@ -1,11 +1,19 @@
 // Bisa diisi nama panggilanmu supaya jejak pengirimnya muncul
 const SENDER_NAME = ""; // contoh: "Zintya"
 
-// Atur detik mulai lagu1.mp3 (0 = dari awal file lagu1.mp3)
+// =========================================================================
+// PENGATURAN SINKRONISASI DETIK LAGU (lagu1.mp3)
+// =========================================================================
+// 1. Detik mulai pemutaran file lagu1.mp3 (0 = dari awal file)
 const ENDING_MUSIC_START_SEC = 0;
 
-// Jeda tiap kata/angka sebelum bentuk hati terbentuk & lampion mulai naik (dalam milidetik)
-const SEQUENCE_STEP_MS = 620;
+// 2. Detik ke berapa di lagu1.mp3 kunang-kunang mulai menyatu membentuk HATI
+//    (Sekuens 3 -> 2 -> 1 -> Selamat -> Hari -> Anak -> Sedunia otomatis membagi waktu sebelum detik ini!)
+const HEART_APPEAR_AT_SEC = 9.2;
+
+// 3. Detik ke berapa di lagu1.mp3 lampion-lampion mulai terbang naik (misal saat lirik "All along I believed")
+const LANTERNS_RISE_AT_SEC = 11.4;
+// =========================================================================
 
 let userName = "Sahabat Hebat";
 const userWishes = [
@@ -27,22 +35,6 @@ let sharedAudioCtx = null;
     }
 })();
 
-// Buat bintang malam untuk mode ending
-(function createNightStars() {
-    const worldBg = document.getElementById('world-bg');
-    for (let i = 0; i < 64; i++) {
-        const s = document.createElement('div');
-        s.className = 'twinkle-star';
-        const sz = Math.random() * 3.5 + 1.5;
-        s.style.width = sz + 'px';
-        s.style.height = sz + 'px';
-        s.style.top = (Math.random() * 76) + '%';
-        s.style.left = (Math.random() * 100) + '%';
-        s.style.animationDelay = (Math.random() * 3) + 's';
-        worldBg.appendChild(s);
-    }
-})();
-
 function getKidMessages() {
     return [
         `"Hai ${userName}! Kita mungkin masih kecil di mata dunia, tapi imajinasi, tawa, dan kebaikanmu bisa bikin dunia jadi tempat yang jauh lebih hangat!" 🌟`,
@@ -60,10 +52,9 @@ function getEndingHopes() {
     ];
 }
 
-// Dialog saling sahut antara 2 karakter anak di step akhir
 function getEndingBuddyDialogs() {
     return [
-        { speaker: "🎈 Teman Balon", text: `Wah, lihat ke langit ${userName}! Hatinya bersinar terang banget! ✨` },
+        { speaker: "🎈 Teman Balon", text: `Wah, lihat ke langit ${userName}! Kunang-kunangnya merajut hati yang bersinar! ✨` },
         { speaker: "🍭 Teman Permen", text: `Iyaa! Lampion harapanmu juga ikut naik tinggi! Kamu hebat banget, ${userName}! 🌟` },
         { speaker: "🎈 Teman Balon", text: `Kalau suatu hari kamu capek, ingat ya ${userName}, kami selalu nyemangatin kamu di sini! 💛` },
         { speaker: "🍭 Teman Permen", text: `Betul! Terus berani bermimpi ya ${userName}, Selamat Hari Anak Sedunia! 🤗🎈` }
@@ -225,7 +216,6 @@ function openTreeStep() {
 
 const lanternPalette = ['#FFD166', '#FF8FA3', '#90E0EF', '#C77DFF', '#B5E48C', '#FFB703'];
 
-// Slot titik gantung tersebar rapi di tajuk pohon agar tidak numpuk
 const treeAnchorSlots = [
     { top: 44, left: 225 },
     { top: 96, left: 84 },
@@ -277,141 +267,356 @@ function addLantern() {
     burstSparkles(window.innerWidth * 0.4, window.innerHeight * 0.45, 30);
 }
 
-/* Gambar Bentuk Hati Berkilau di Canvas */
-let heartAnimFrame = null;
+/* =========================================================================
+   EFEK HUJAN BINTANG JATUH + KUNANG-KUNANG MENYATU & BUYAR (3-2-1-SELAMAT-HARI-ANAK-SEDUNIA -> HATI)
+   ========================================================================= */
+let fireflyAnimId = null;
+const fireflies = [];
+const starRainStreams = [];
+let morphMode = 'scatter'; // 'scatter' | 'word' | 'heart'
 
-function startGlowingHeartCanvas() {
-    const hCanvas = document.getElementById('heart-canvas');
-    const hCtx = hCanvas.getContext('2d');
-    const w = hCanvas.width;
-    const h = hCanvas.height;
-    const heartDots = [];
+function getCenterTarget() {
+    const isMobile = window.innerWidth <= 768;
+    return {
+        cx: isMobile ? window.innerWidth * 0.5 : window.innerWidth * 0.58,
+        cy: isMobile ? window.innerHeight * 0.56 : window.innerHeight * 0.45
+    };
+}
 
-    for (let i = 0; i < 180; i++) {
-        const t = (i / 180) * Math.PI * 2;
-        const x = 16 * Math.pow(Math.sin(t), 3);
-        const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-        heartDots.push({
-            baseX: w / 2 + x * 9.5,
-            baseY: h / 2 + y * 9.5 - 10,
+// Ambil koordinat titik-titik dari teks (untuk 3, 2, 1, Selamat, Hari, Anak, Sedunia)
+function sampleTextPoints(word) {
+    const off = document.createElement('canvas');
+    const oCtx = off.getContext('2d');
+    const w = Math.min(760, Math.floor(window.innerWidth * 0.85));
+    const h = 220;
+    off.width = w;
+    off.height = h;
+
+    const fontSize = word.length === 1 ? 148 : (word.length <= 4 ? 115 : 88);
+    oCtx.fillStyle = '#FFFFFF';
+    oCtx.font = `700 ${fontSize}px Fredoka, sans-serif`;
+    oCtx.textAlign = 'center';
+    oCtx.textBaseline = 'middle';
+    oCtx.fillText(word, w / 2, h / 2);
+
+    const imgData = oCtx.getImageData(0, 0, w, h).data;
+    const pts = [];
+    const gap = word.length === 1 ? 7 : 6;
+
+    for (let y = 0; y < h; y += gap) {
+        for (let x = 0; x < w; x += gap) {
+            const alpha = imgData[(y * w + x) * 4 + 3];
+            if (alpha > 140) {
+                pts.push({ x: x - w / 2, y: y - h / 2 });
+            }
+        }
+    }
+    return pts;
+}
+
+// Ambil koordinat garis hati tebal yang dirajut kunang-kunang
+function sampleHeartPoints() {
+    const pts = [];
+    const isMobile = window.innerWidth <= 768;
+    const scale = isMobile ? 9.2 : 12.2;
+
+    // 3 lapisan cincin hati agar terlihat rimbun dirajut kunang-kunang seperti di video
+    const rings = [0.92, 1.0, 1.08];
+    rings.forEach((ringScale, rIdx) => {
+        const steps = 110 + rIdx * 20;
+        for (let i = 0; i < steps; i++) {
+            const t = (i / steps) * Math.PI * 2;
+            const hx = 16 * Math.pow(Math.sin(t), 3);
+            const hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+            pts.push({
+                x: hx * scale * ringScale + (Math.random() - 0.5) * 8,
+                y: hy * scale * ringScale - 12 + (Math.random() - 0.5) * 8
+            });
+        }
+    });
+    return pts;
+}
+
+function initFireflyMorphEngine() {
+    const fCanvas = document.getElementById('firefly-morph-canvas');
+    const fCtx = fCanvas.getContext('2d');
+
+    function syncSize() {
+        fCanvas.width = window.innerWidth;
+        fCanvas.height = window.innerHeight;
+    }
+    syncSize();
+    window.addEventListener('resize', syncSize);
+
+    // 1. Siapkan hujan bintang-bintang jatuh lembut di latar langit malam (pengganti garis matrix)
+    starRainStreams.length = 0;
+    const colCount = Math.floor(window.innerWidth / 28);
+    for (let c = 0; c < colCount; c++) {
+        starRainStreams.push({
+            x: c * 28 + Math.random() * 14,
+            y: Math.random() * -window.innerHeight,
+            speed: 1.4 + Math.random() * 2.1,
+            length: 4 + Math.floor(Math.random() * 6),
+            phase: Math.random() * Math.PI * 2
+        });
+    }
+
+    // 2. Siapkan 420 kunang-kunang bercahaya untuk membentuk angka, kata, dan hati
+    fireflies.length = 0;
+    const totalFlies = 420;
+    for (let i = 0; i < totalFlies; i++) {
+        fireflies.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            vx: (Math.random() - 0.5) * 3,
+            vy: (Math.random() - 0.5) * 3,
+            tx: window.innerWidth * 0.58,
+            ty: window.innerHeight * 0.45,
+            active: false,
+            size: Math.random() * 2.6 + 1.8,
             phase: Math.random() * Math.PI * 2,
-            size: Math.random() * 3.2 + 2,
-            color: i % 3 === 0 ? '#FFD166' : (i % 2 === 0 ? '#FF6B8B' : '#FF8FA3')
+            isPink: i % 2 === 0
         });
     }
 
     let tick = 0;
-    function renderHeart() {
-        tick += 0.04;
-        hCtx.clearRect(0, 0, w, h);
+    function drawStarShape(ctx, cx, cy, r, alpha, color) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        for (let k = 0; k < 4; k++) {
+            const ang = (k * Math.PI) / 2;
+            const ox = cx + Math.cos(ang) * r;
+            const oy = cy + Math.sin(ang) * r;
+            const ix = cx + Math.cos(ang + Math.PI / 4) * (r * 0.32);
+            const iy = cy + Math.sin(ang + Math.PI / 4) * (r * 0.32);
+            if (k === 0) ctx.moveTo(ox, oy);
+            else ctx.lineTo(ox, oy);
+            ctx.lineTo(ix, iy);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+    }
 
-        heartDots.forEach((d) => {
-            const pulse = 1 + Math.sin(tick + d.phase) * 0.045;
-            const px = w / 2 + (d.baseX - w / 2) * pulse;
-            const py = h / 2 + (d.baseY - h / 2) * pulse;
+    function loopMorph() {
+        tick += 0.045;
+        fCtx.clearRect(0, 0, fCanvas.width, fCanvas.height);
 
-            hCtx.save();
-            hCtx.globalAlpha = 0.72 + Math.sin(tick * 1.4 + d.phase) * 0.25;
-            hCtx.fillStyle = d.color;
-            hCtx.shadowColor = d.color;
-            hCtx.shadowBlur = 12;
-            hCtx.beginPath();
-            hCtx.arc(px, py, d.size, 0, Math.PI * 2);
-            hCtx.fill();
-            hCtx.restore();
+        // Gambar hujan bintang-bintang jatuh di latar malam
+        starRainStreams.forEach((st) => {
+            st.y += st.speed;
+            if (st.y - st.length * 18 > fCanvas.height) {
+                st.y = -20;
+                st.x = Math.random() * fCanvas.width;
+            }
+            for (let s = 0; s < st.length; s++) {
+                const sy = st.y - s * 18;
+                if (sy < -10 || sy > fCanvas.height + 10) continue;
+                const fade = (1 - s / st.length) * (0.45 + 0.35 * Math.sin(tick + st.phase + s));
+                const starColor = s === 0 ? '#FFFDF7' : (s % 2 === 0 ? '#FFD166' : '#FF8FA3');
+                drawStarShape(fCtx, st.x, sy, s === 0 ? 4.4 : 3.0, Math.max(0.08, fade), starColor);
+            }
         });
 
-        heartAnimFrame = requestAnimationFrame(renderHeart);
+        // Gambar & gerakkan kunang-kunang
+        const { cx, cy } = getCenterTarget();
+        const heartBeat = morphMode === 'heart' ? (1 + Math.sin(tick * 1.4) * 0.035) : 1;
+
+        fireflies.forEach((f) => {
+            if (morphMode === 'scatter' || !f.active) {
+                // Terbang melayang bebas seperti kunang-kunang
+                f.vx += (Math.random() - 0.5) * 0.25;
+                f.vy += (Math.random() - 0.5) * 0.25;
+                f.vx *= 0.96;
+                f.vy *= 0.96;
+                f.x += f.vx;
+                f.y += f.vy;
+
+                if (f.x < 0) f.x = fCanvas.width;
+                if (f.x > fCanvas.width) f.x = 0;
+                if (f.y < 0) f.y = fCanvas.height;
+                if (f.y > fCanvas.height) f.y = 0;
+            } else {
+                // Menyatu perlahan menuju formasi huruf atau hati
+                const goalX = cx + (f.tx - cx) * heartBeat + Math.sin(tick * 1.6 + f.phase) * 1.6;
+                const goalY = cy + (f.ty - cy) * heartBeat + Math.cos(tick * 1.5 + f.phase) * 1.6;
+                f.x += (goalX - f.x) * 0.11;
+                f.y += (goalY - f.y) * 0.11;
+            }
+
+            const glowAlpha = 0.62 + Math.sin(tick * 2.2 + f.phase) * 0.35;
+            let flyColor = '#FFF3B0';
+            if (morphMode === 'heart' && f.active) {
+                flyColor = f.isPink ? '#FF6B8B' : '#FFD166';
+            } else if (f.active) {
+                flyColor = f.isPink ? '#FFFDF7' : '#FFD166';
+            }
+
+            fCtx.save();
+            fCtx.globalAlpha = Math.max(0.18, glowAlpha);
+            fCtx.fillStyle = flyColor;
+            fCtx.shadowColor = flyColor;
+            fCtx.shadowBlur = morphMode === 'heart' ? 14 : 10;
+            fCtx.beginPath();
+            fCtx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
+            fCtx.fill();
+            fCtx.restore();
+        });
+
+        fireflyAnimId = requestAnimationFrame(loopMorph);
     }
-    if (!heartAnimFrame) renderHeart();
+
+    if (!fireflyAnimId) loopMorph();
 }
 
-/* Sekuens Malam: 3 -> 2 -> 1 -> Selamat -> Hari -> Anak -> Sedunia -> Hati + Lampion */
+function morphFirefliesToWord(word) {
+    const { cx, cy } = getCenterTarget();
+    const pts = sampleTextPoints(word);
+    morphMode = 'word';
+
+    fireflies.forEach((f, idx) => {
+        if (idx < pts.length) {
+            f.active = true;
+            f.tx = cx + pts[idx].x;
+            f.ty = cy + pts[idx].y;
+        } else {
+            f.active = false;
+        }
+    });
+}
+
+function scatterFirefliesBurst() {
+    morphMode = 'scatter';
+    fireflies.forEach((f) => {
+        if (f.active) {
+            const ang = Math.random() * Math.PI * 2;
+            const spd = 4 + Math.random() * 8;
+            f.vx = Math.cos(ang) * spd;
+            f.vy = Math.sin(ang) * spd;
+        }
+        f.active = false;
+    });
+}
+
+function morphFirefliesToHeart() {
+    const { cx, cy } = getCenterTarget();
+    const pts = sampleHeartPoints();
+    morphMode = 'heart';
+
+    fireflies.forEach((f, idx) => {
+        const targetPt = pts[idx % pts.length];
+        f.active = true;
+        f.tx = cx + targetPt.x;
+        f.ty = cy + targetPt.y;
+    });
+}
+
+/* Sekuens Malam Tersinkron dengan Detik Lagu (lagu1.mp3) */
 function prepareGrandFinale() {
     playTone(587, 0.22);
     document.getElementById('step-3').classList.add('hidden');
     document.getElementById('main-stage').classList.remove('wide-stage');
     document.body.classList.add('night-magic');
 
-    // Mulai lagu1.mp3 tepat saat masuk sekuens akhir
-    startEndingMusic();
-
     const seqLayer = document.getElementById('finale-sequence');
-    const wordEl = document.getElementById('sequence-word');
     seqLayer.classList.remove('hidden');
+    initFireflyMorphEngine();
 
-    updateBuddyChat("🎈 Teman Balon", `Sstt... lihat ke langit malam, ${userName}! ✨`);
+    // Mulai putar lagu1.mp3 dan catat waktu mulai sekuens
+    startEndingMusic();
+    const sequenceStartTime = performance.now();
+
+    updateBuddyChat("🎈 Teman Balon", `Sstt... lihat kunang-kunang & bintang jatuh di langit, ${userName}! ✨`);
 
     const sequenceSteps = ["3", "2", "1", "Selamat", "Hari", "Anak", "Sedunia"];
-    let idx = 0;
+    // Bagi total waktu sebelum HEART_APPEAR_AT_SEC ke 7 kata secara merata & lebih pelan
+    const totalPreHeartMs = Math.max(5600, HEART_APPEAR_AT_SEC * 1000);
+    const perWordSlotMs = totalPreHeartMs / sequenceSteps.length;
+    const holdDurationMs = perWordSlotMs * 0.72;
 
-    function showNextWord() {
-        if (idx >= sequenceSteps.length) {
-            wordEl.classList.remove('show-word');
+    let stepIdx = 0;
+
+    function runNextSequenceWord() {
+        if (stepIdx >= sequenceSteps.length) {
+            // Tunggu tepat sampai detik HEART_APPEAR_AT_SEC sebelum merajut hati
+            const elapsedMs = performance.now() - sequenceStartTime;
+            const waitToHeartMs = Math.max(120, totalPreHeartMs - elapsedMs);
             setTimeout(() => {
-                wordEl.classList.add('hidden');
-                revealHeartAndLanterns();
-            }, 240);
+                revealHeartAndLanterns(sequenceStartTime);
+            }, waitToHeartMs);
             return;
         }
 
-        wordEl.classList.remove('show-word');
+        const currentWord = sequenceSteps[stepIdx];
+        morphFirefliesToWord(currentWord);
+        playTone(stepIdx < 3 ? 523 + stepIdx * 65 : 698 + (stepIdx - 3) * 55, 0.16);
+        stepIdx++;
+
+        // Tahan kata agar terbaca jelas, lalu buyar jadi kunang-kunang sebelum kata berikutnya
         setTimeout(() => {
-            wordEl.textContent = sequenceSteps[idx];
-            wordEl.classList.add('show-word');
-            playTone(idx < 3 ? 523 + idx * 65 : 698 + (idx - 3) * 55, 0.16);
-            burstSparkles(window.innerWidth * 0.56, window.innerHeight * 0.45, 18);
-            idx++;
-            setTimeout(showNextWord, SEQUENCE_STEP_MS);
-        }, 140);
+            scatterFirefliesBurst();
+            setTimeout(runNextSequenceWord, perWordSlotMs - holdDurationMs);
+        }, holdDurationMs);
     }
 
-    showNextWord();
+    // Jeda pembuka 450ms untuk hujan bintang jatuh sebelum angka "3" menyatu
+    setTimeout(runNextSequenceWord, 450);
 }
 
-function revealHeartAndLanterns() {
-    const heartBox = document.getElementById('heart-showcase');
-    heartBox.classList.remove('hidden');
-    startGlowingHeartCanvas();
-
-    requestAnimationFrame(() => {
-        heartBox.classList.add('heart-active');
-    });
-
-    // Begitu hati terbentuk & bertahan, lampion ikut naik dan kartu ending + obrolan 2 anak aktif
+function revealHeartAndLanterns(sequenceStartTime) {
+    // 1. Kunang-kunang mulai merajut bentuk HATI
+    morphFirefliesToHeart();
     playTone(1046, 0.28);
-    document.getElementById('step-4').classList.remove('hidden');
-    launchSkyLanternWave();
-    triggerGrandFireworks();
 
-    // Mulai dialog bergantian 2 karakter anak
-    const dialogs = getEndingBuddyDialogs();
-    updateBuddyChat(dialogs[0].speaker, dialogs[0].text);
-    dialogIdx = 1;
+    // 2. Setelah hati mulai terbentuk (~900ms), munculkan teks "You Are Awesome, [Name]!" di dalam hati
+    setTimeout(() => {
+        document.getElementById('heart-inner-text').classList.remove('hidden');
+        requestAnimationFrame(() => {
+            document.getElementById('heart-inner-text').classList.add('visible-heart-text');
+        });
+    }, 900);
 
-    if (!dialogInterval) {
-        dialogInterval = setInterval(() => {
-            if (document.body.classList.contains('night-magic')) {
-                const list = getEndingBuddyDialogs();
-                const current = list[dialogIdx % list.length];
-                dialogIdx++;
-                updateBuddyChat(current.speaker, current.text);
-            }
-        }, 4400);
-    }
+    // 3. Tepat di detik LANTERNS_RISE_AT_SEC, lampion mulai naik & dialog 2 anak + kartu ending muncul
+    const elapsedMs = performance.now() - sequenceStartTime;
+    const waitToLanternMs = Math.max(950, LANTERNS_RISE_AT_SEC * 1000 - elapsedMs);
 
-    if (!lanternInterval) {
-        lanternInterval = setInterval(() => {
-            if (document.body.classList.contains('night-magic')) {
-                const personalizedDefaults = defaultLanternPool.map((item, idx) =>
-                    idx === 0 ? { text: "Tetap semangat & bahagia!", author: userName } : item
-                );
-                const pool = [...userWishes, ...personalizedDefaults];
-                const pick = pool[Math.floor(Math.random() * pool.length)];
-                spawnSingleSkyLantern(pick);
-            }
-        }, 2900);
-    }
+    setTimeout(() => {
+        document.getElementById('step-4').classList.remove('hidden');
+        launchSkyLanternWave();
+        triggerGrandFireworks();
+
+        const dialogs = getEndingBuddyDialogs();
+        updateBuddyChat(dialogs[0].speaker, dialogs[0].text);
+        dialogIdx = 1;
+
+        if (!dialogInterval) {
+            dialogInterval = setInterval(() => {
+                if (document.body.classList.contains('night-magic')) {
+                    const list = getEndingBuddyDialogs();
+                    const current = list[dialogIdx % list.length];
+                    dialogIdx++;
+                    updateBuddyChat(current.speaker, current.text);
+                }
+            }, 4400);
+        }
+
+        if (!lanternInterval) {
+            lanternInterval = setInterval(() => {
+                if (document.body.classList.contains('night-magic')) {
+                    const personalizedDefaults = defaultLanternPool.map((item, idx) =>
+                        idx === 0 ? { text: "Tetap semangat & bahagia!", author: userName } : item
+                    );
+                    const pool = [...userWishes, ...personalizedDefaults];
+                    const pick = pool[Math.floor(Math.random() * pool.length)];
+                    spawnSingleSkyLantern(pick);
+                }
+            }, 2900);
+        }
+    }, waitToLanternMs);
 }
 
 // Jalur lampion di sisi tengah-kanan agar tidak menutupi kartu kiri
@@ -577,7 +782,6 @@ function renderParticles() {
 }
 renderParticles();
 
-// Dukungan tombol Enter di kolom nama
 document.addEventListener('DOMContentLoaded', () => {
     const nameInput = document.getElementById('user-name-input');
     nameInput?.addEventListener('keydown', (e) => {
