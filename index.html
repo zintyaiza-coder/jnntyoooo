@@ -31,7 +31,7 @@
 
     <!-- Siluet Pohon Harapan di Latar Belakang Mode Malam (Ending) -->
     <div class="night-tree-backdrop" id="night-tree-backdrop" aria-hidden="true">
-        <svg viewBox="0 0 360 320" width="360" height="320">
+        <svg viewBox="0 0 360 320" width="320" height="285">
             <circle cx="180" cy="125" r="115" fill="rgba(255, 209, 102, 0.08)"/>
             <path d="M150 305 Q162 220 146 162 L214 162 Q198 220 210 305 Z" fill="#2A1F3D"/>
             <path d="M160 196 L102 136 M200 192 L258 134" stroke="#2A1F3D" stroke-width="15" stroke-linecap="round"/>
@@ -66,7 +66,7 @@
     <div class="companions-dock" id="companions-dock" onclick="cheerCharacter()" title="Klik teman-temanmu!">
         <!-- Anak 1: Memegang Balon -->
         <div class="char-unit char-balloon">
-            <svg viewBox="0 0 175 215" width="128" height="158">
+            <svg viewBox="0 0 175 215" width="120" height="148">
                 <g class="balloon-float">
                     <path d="M35 72 Q28 106 38 136" stroke="#FFF9DB" stroke-width="2" fill="none"/>
                     <ellipse cx="34" cy="42" rx="24" ry="29" fill="#FF6B8B"/>
@@ -111,7 +111,7 @@
 
         <!-- Anak 2: Membawa Permen Lolipop -->
         <div class="char-unit char-candy">
-            <svg viewBox="0 0 175 215" width="124" height="154">
+            <svg viewBox="0 0 175 215" width="116" height="144">
                 <circle cx="80" cy="122" r="54" fill="rgba(144, 224, 239, 0.16)"/>
                 <rect x="63" y="170" width="11" height="26" rx="5.5" fill="#FFD1AA"/>
                 <rect x="86" y="170" width="11" height="26" rx="5.5" fill="#FFD1AA"/>
@@ -200,7 +200,7 @@
             <div class="tree-workspace">
                 <div class="tree-stage">
                     <svg viewBox="0 0 420 350" width="100%" height="100%">
-                        <circle cx="210" cy="145" r="135" fill="#FFD166" opacity="0.16" class="tree-aura"/>
+                        <circle cx="210" cy="145" r="135" fill="#FFD166" opacity="0.18" class="tree-aura"/>
                         <path d="M176 334 Q190 245 172 182 L248 182 Q230 245 244 334 Z" fill="#7F4F24"/>
                         <path d="M188 218 L120 152 M232 214 L300 150 M210 195 L210 128" stroke="#7F4F24" stroke-width="15" stroke-linecap="round"/>
                         <g class="tree-canopy">
@@ -215,7 +215,7 @@
                     </svg>
 
                     <div class="lantern-zone" id="lantern-zone">
-                        <div class="wish-lantern" style="top: 38px; left: 132px; background: #FFD166;" onclick="showLanternMsg('Semoga semua anak bisa tersenyum bahagia! 😊')">
+                        <div class="wish-lantern" style="top: 32px; left: 118px; background: #FFD166;" onclick="showLanternMsg('Semoga semua anak bisa tersenyum bahagia! 😊')">
                             ⭐ Semua anak bahagia
                         </div>
                     </div>
@@ -241,10 +241,10 @@
             </div>
         </div>
 
-        <!-- CANVAS PARTIKEL KUNANG-KUNANG & HUJAN BINTANG -->
+        <!-- CANVAS PARTIKEL KUNANG-KUNANG + TEKS JELAS + HATI -->
         <div class="finale-sequence-layer hidden" id="finale-sequence">
             <canvas id="firefly-morph-canvas"></canvas>
-            <div class="word-backdrop-glow hidden" id="word-backdrop-glow"></div>
+            <div class="countdown-clear-word hidden" id="countdown-clear-word"></div>
             <div class="heart-inner-text hidden" id="heart-inner-text">You Are Awesome!</div>
         </div>
 
@@ -253,6 +253,7 @@
             <span class="tag-pill">SELAMAT HARI ANAK SEDUNIA 🏮</span>
             <h1 id="ending-title">Teruslah Bersinar! 🌟</h1>
             <p class="ending-mini-hope" id="ending-hope-text"></p>
+            <p class="rotate-tip-mini">💡 Tip HP: boleh dimiringkan ke samping (landscape) kalau mau tampilan lebih lebar.</p>
 
             <div class="hug-toast" id="hug-box"></div>
 
