@@ -1,5 +1,5 @@
 // Bisa diisi nama panggilanmu supaya jejak pengirimnya muncul
-const SENDER_NAME = ""; // contoh: "Zintya"
+const SENDER_NAME = ""; // contoh: "zintya"
 
 // =========================================================================
 // PENGATURAN SINKRONISASI DETIK LAGU (lagu1.mp3)
@@ -21,8 +21,10 @@ let dialogIdx = 0;
 let laneIndex = 0;
 let sharedAudioCtx = null;
 
-// Deteksi otomatis apakah perangkat saat ini HP atau Laptop/Desktop
 function isMobileDevice() {
+    const isLandscape = window.innerWidth > window.innerHeight && window.innerHeight <= 520;
+    if (isLandscape) return false;
+
     const byWidth = window.innerWidth <= 768;
     const byUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const byPortraitNarrow = window.innerWidth < 860 && window.innerHeight > window.innerWidth;
@@ -228,14 +230,15 @@ function openTreeStep() {
 
 const lanternPalette = ['#FFD166', '#FF8FA3', '#90E0EF', '#C77DFF', '#B5E48C', '#FFB703'];
 
+// Slot titik gantung tersebar di tajuk pohon (diatur agar tidak terlalu mepet ke pinggir)
 const treeAnchorSlots = [
-    { top: 44, left: 225 },
-    { top: 96, left: 84 },
-    { top: 102, left: 248 },
-    { top: 146, left: 152 },
-    { top: 68, left: 165 },
-    { top: 154, left: 66 },
-    { top: 152, left: 262 }
+    { top: 42, left: 190 },
+    { top: 82, left: 74 },
+    { top: 86, left: 215 },
+    { top: 126, left: 132 },
+    { top: 132, left: 56 },
+    { top: 134, left: 220 },
+    { top: 168, left: 142 }
 ];
 
 function showLanternMsg(msg) {
@@ -260,9 +263,12 @@ function addLantern() {
     const item = document.createElement('div');
     item.className = 'wish-lantern';
 
+    const mobile = isMobileDevice();
     const slot = treeAnchorSlots[(userWishes.length - 2) % treeAnchorSlots.length];
-    const top = slot.top + (Math.random() * 12 - 6);
-    const left = slot.left + (Math.random() * 14 - 7);
+    const scaleX = mobile ? 0.65 : 1;
+    const scaleY = mobile ? 0.72 : 1;
+    const top = Math.max(18, Math.round(slot.top * scaleY + (Math.random() * 8 - 4)));
+    const left = Math.max(12, Math.round(slot.left * scaleX + (Math.random() * 10 - 5)));
     const bg = lanternPalette[Math.floor(Math.random() * lanternPalette.length)];
 
     item.style.top = top + 'px';
@@ -280,7 +286,7 @@ function addLantern() {
 }
 
 /* =========================================================================
-   EFEK HUJAN BINTANG JATUH + KUNANG-KUNANG BESAR & JELAS (3-2-1-SELAMAT-HARI-ANAK-SEDUNIA -> HATI)
+   EFEK KUNANG-KUNANG + TEKS 3-2-1-SELAMAT-HARI-ANAK-SEDUNIA JELAS + HATI
    ========================================================================= */
 let fireflyAnimId = null;
 const fireflies = [];
@@ -291,61 +297,25 @@ function getCenterTarget() {
     const mobile = isMobileDevice();
     return {
         cx: mobile ? window.innerWidth * 0.5 : window.innerWidth * 0.58,
-        cy: mobile ? window.innerHeight * 0.56 : window.innerHeight * 0.45
+        cy: mobile ? window.innerHeight * 0.58 : window.innerHeight * 0.45
     };
-}
-
-function sampleTextPoints(word) {
-    const off = document.createElement('canvas');
-    const oCtx = off.getContext('2d');
-    const mobile = isMobileDevice();
-    const w = Math.min(820, Math.floor(window.innerWidth * (mobile ? 0.94 : 0.86)));
-    const h = 230;
-    off.width = w;
-    off.height = h;
-
-    // Ukuran diperbesar agar 3-2-1-Selamat-Hari-Anak-Sedunia lebih gagah & mudah dibaca
-    const fontSize = mobile
-        ? (word.length === 1 ? 132 : (word.length <= 4 ? 92 : 68))
-        : (word.length === 1 ? 176 : (word.length <= 4 ? 138 : 106));
-
-    oCtx.fillStyle = '#FFFFFF';
-    oCtx.font = `700 ${fontSize}px Fredoka, sans-serif`;
-    oCtx.textAlign = 'center';
-    oCtx.textBaseline = 'middle';
-    oCtx.fillText(word, w / 2, h / 2);
-
-    const imgData = oCtx.getImageData(0, 0, w, h).data;
-    const pts = [];
-    const gap = word.length === 1 ? 4 : 3.5;
-
-    for (let y = 0; y < h; y += Math.ceil(gap)) {
-        for (let x = 0; x < w; x += Math.ceil(gap)) {
-            const alpha = imgData[(y * w + x) * 4 + 3];
-            if (alpha > 120) {
-                pts.push({ x: x - w / 2, y: y - h / 2 });
-            }
-        }
-    }
-    return pts;
 }
 
 function sampleHeartPoints() {
     const pts = [];
     const mobile = isMobileDevice();
-    const scale = mobile ? 9.8 : 13.4;
+    const scale = mobile ? 9.2 : 13.2;
 
-    // 4 lapisan cincin hati agar bentuk hati kunang-kunang terlihat tebal dan bercahaya jelas
     const rings = [0.88, 0.96, 1.04, 1.12];
     rings.forEach((ringScale, rIdx) => {
-        const steps = 115 + rIdx * 18;
+        const steps = 110 + rIdx * 18;
         for (let i = 0; i < steps; i++) {
             const t = (i / steps) * Math.PI * 2;
             const hx = 16 * Math.pow(Math.sin(t), 3);
             const hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
             pts.push({
                 x: hx * scale * ringScale + (Math.random() - 0.5) * 6,
-                y: hy * scale * ringScale - 12 + (Math.random() - 0.5) * 6
+                y: hy * scale * ringScale - 10 + (Math.random() - 0.5) * 6
             });
         }
     });
@@ -364,22 +334,20 @@ function initFireflyMorphEngine() {
     syncSize();
     window.addEventListener('resize', syncSize);
 
-    // 1. Hujan bintang jatuh lembut di latar malam (lebih halus agar tidak menutupi teks/hati)
     starRainStreams.length = 0;
-    const colCount = Math.floor(window.innerWidth / 34);
+    const colCount = Math.floor(window.innerWidth / 38);
     for (let c = 0; c < colCount; c++) {
         starRainStreams.push({
-            x: c * 34 + Math.random() * 16,
+            x: c * 38 + Math.random() * 16,
             y: Math.random() * -window.innerHeight,
-            speed: 1.2 + Math.random() * 1.7,
-            length: 3 + Math.floor(Math.random() * 4),
+            speed: 1.1 + Math.random() * 1.5,
+            length: 3 + Math.floor(Math.random() * 3),
             phase: Math.random() * Math.PI * 2
         });
     }
 
-    // 2. Kunang-kunang diperbanyak & diperjelas ukurannya
     fireflies.length = 0;
-    const totalFlies = 540;
+    const totalFlies = 460;
     for (let i = 0; i < totalFlies; i++) {
         fireflies.push({
             x: Math.random() * window.innerWidth,
@@ -400,8 +368,6 @@ function initFireflyMorphEngine() {
         ctx.save();
         ctx.globalAlpha = alpha;
         ctx.fillStyle = color;
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 6;
         ctx.beginPath();
         for (let k = 0; k < 4; k++) {
             const ang = (k * Math.PI) / 2;
@@ -422,19 +388,17 @@ function initFireflyMorphEngine() {
         ctx.save();
         ctx.globalAlpha = alpha;
 
-        // Aura cahaya kunang-kunang
         ctx.fillStyle = color;
         ctx.shadowColor = color;
-        ctx.shadowBlur = isFormed ? 18 : 12;
+        ctx.shadowBlur = isFormed ? 18 : 11;
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Inti terang di tengah supaya bentuk huruf & hati lebih tegas
         ctx.shadowBlur = 0;
         ctx.fillStyle = '#FFFDF9';
         ctx.beginPath();
-        ctx.arc(x, y, radius * 0.46, 0, Math.PI * 2);
+        ctx.arc(x, y, radius * 0.45, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.restore();
@@ -444,28 +408,27 @@ function initFireflyMorphEngine() {
         tick += 0.045;
         fCtx.clearRect(0, 0, fCanvas.width, fCanvas.height);
 
-        // Hujan bintang jatuh
+        // Hujan bintang jatuh lembut di latar
         starRainStreams.forEach((st) => {
             st.y += st.speed;
-            if (st.y - st.length * 20 > fCanvas.height) {
+            if (st.y - st.length * 22 > fCanvas.height) {
                 st.y = -20;
                 st.x = Math.random() * fCanvas.width;
             }
             for (let s = 0; s < st.length; s++) {
-                const sy = st.y - s * 20;
+                const sy = st.y - s * 22;
                 if (sy < -10 || sy > fCanvas.height + 10) continue;
-                const fade = (1 - s / st.length) * (0.28 + 0.22 * Math.sin(tick + st.phase + s));
+                const fade = (1 - s / st.length) * (0.22 + 0.16 * Math.sin(tick + st.phase + s));
                 const starColor = s === 0 ? '#FFFDF7' : (s % 2 === 0 ? '#FFD166' : '#FF8FA3');
-                drawStarShape(fCtx, st.x, sy, s === 0 ? 3.8 : 2.6, Math.max(0.05, fade), starColor);
+                drawStarShape(fCtx, st.x, sy, s === 0 ? 3.4 : 2.3, Math.max(0.05, fade), starColor);
             }
         });
 
-        // Kunang-kunang
         const { cx, cy } = getCenterTarget();
         const heartBeat = morphMode === 'heart' ? (1 + Math.sin(tick * 1.4) * 0.035) : 1;
 
         fireflies.forEach((f) => {
-            if (morphMode === 'scatter' || !f.active) {
+            if (morphMode !== 'heart' || !f.active) {
                 f.vx += (Math.random() - 0.5) * 0.25;
                 f.vy += (Math.random() - 0.5) * 0.25;
                 f.vx *= 0.96;
@@ -484,19 +447,17 @@ function initFireflyMorphEngine() {
                 f.y += (goalY - f.y) * 0.12;
             }
 
-            const glowAlpha = f.active
-                ? (0.82 + Math.sin(tick * 2.2 + f.phase) * 0.18)
-                : (0.52 + Math.sin(tick * 2.0 + f.phase) * 0.28);
+            const isHeartActive = morphMode === 'heart' && f.active;
+            const glowAlpha = isHeartActive
+                ? (0.85 + Math.sin(tick * 2.2 + f.phase) * 0.15)
+                : (0.48 + Math.sin(tick * 2.0 + f.phase) * 0.25);
 
-            let flyColor = '#FFF3B0';
-            if (morphMode === 'heart' && f.active) {
-                flyColor = f.isPink ? '#FF6B8B' : '#FFD166';
-            } else if (f.active) {
-                flyColor = f.isPink ? '#FF8FA3' : '#FFD166';
-            }
+            const flyColor = isHeartActive
+                ? (f.isPink ? '#FF6B8B' : '#FFD166')
+                : (f.isPink ? '#FF8FA3' : '#FFF3B0');
 
-            const drawRadius = f.active ? f.size * 1.25 : f.size;
-            drawFireflyGlow(fCtx, f.x, f.y, drawRadius, Math.max(0.18, glowAlpha), flyColor, f.active);
+            const drawRadius = isHeartActive ? f.size * 1.25 : f.size;
+            drawFireflyGlow(fCtx, f.x, f.y, drawRadius, Math.max(0.18, glowAlpha), flyColor, isHeartActive);
         });
 
         fireflyAnimId = requestAnimationFrame(loopMorph);
@@ -505,54 +466,26 @@ function initFireflyMorphEngine() {
     if (!fireflyAnimId) loopMorph();
 }
 
-function morphFirefliesToWord(word) {
+function showClearSequenceWord(word) {
+    const wordEl = document.getElementById('countdown-clear-word');
     const { cx, cy } = getCenterTarget();
-    const pts = sampleTextPoints(word);
-    morphMode = 'word';
-
-    const glowEl = document.getElementById('word-backdrop-glow');
-    if (glowEl) {
-        glowEl.style.left = cx + 'px';
-        glowEl.style.top = cy + 'px';
-        glowEl.textContent = word;
-        glowEl.classList.remove('hidden');
-        requestAnimationFrame(() => glowEl.classList.add('active-glow'));
-    }
-
-    const innerHeartText = document.getElementById('heart-inner-text');
-    if (innerHeartText) {
-        innerHeartText.style.left = cx + 'px';
-        innerHeartText.style.top = cy + 'px';
-    }
-
-    fireflies.forEach((f, idx) => {
-        if (idx < pts.length) {
-            f.active = true;
-            f.tx = cx + pts[idx].x;
-            f.ty = cy + pts[idx].y;
-        } else {
-            f.active = false;
-        }
-    });
+    wordEl.style.left = cx + 'px';
+    wordEl.style.top = cy + 'px';
+    wordEl.textContent = word;
+    wordEl.classList.remove('hidden');
+    wordEl.classList.remove('show-clear-word');
+    void wordEl.offsetWidth;
+    wordEl.classList.add('show-clear-word');
 }
 
-function scatterFirefliesBurst() {
-    morphMode = 'scatter';
-    const glowEl = document.getElementById('word-backdrop-glow');
-    if (glowEl) {
-        glowEl.classList.remove('active-glow');
-        setTimeout(() => glowEl.classList.add('hidden'), 220);
-    }
-
-    fireflies.forEach((f) => {
-        if (f.active) {
-            const ang = Math.random() * Math.PI * 2;
-            const spd = 4 + Math.random() * 8;
-            f.vx = Math.cos(ang) * spd;
-            f.vy = Math.sin(ang) * spd;
+function hideClearSequenceWord() {
+    const wordEl = document.getElementById('countdown-clear-word');
+    wordEl.classList.remove('show-clear-word');
+    setTimeout(() => {
+        if (!wordEl.classList.contains('show-clear-word')) {
+            wordEl.classList.add('hidden');
         }
-        f.active = false;
-    });
+    }, 180);
 }
 
 function morphFirefliesToHeart() {
@@ -574,7 +507,6 @@ function morphFirefliesToHeart() {
     });
 }
 
-/* Sekuens Malam Tersinkron dengan Detik Lagu (lagu1.mp3) */
 function prepareGrandFinale() {
     syncDeviceLayoutMode();
     playTone(587, 0.22);
@@ -589,7 +521,7 @@ function prepareGrandFinale() {
     startEndingMusic();
     const sequenceStartTime = performance.now();
 
-    updateBuddyChat("🎈 Teman Balon", `Sstt... lihat kunang-kunang & bintang jatuh di langit, ${userName}! ✨`);
+    updateBuddyChat("🎈 Teman Balon", `Sstt... lihat ke langit malam, ${userName}! ✨`);
 
     const sequenceSteps = ["3", "2", "1", "Selamat", "Hari", "Anak", "Sedunia"];
     const totalPreHeartMs = Math.max(5600, HEART_APPEAR_AT_SEC * 1000);
@@ -600,6 +532,7 @@ function prepareGrandFinale() {
 
     function runNextSequenceWord() {
         if (stepIdx >= sequenceSteps.length) {
+            hideClearSequenceWord();
             const elapsedMs = performance.now() - sequenceStartTime;
             const waitToHeartMs = Math.max(120, totalPreHeartMs - elapsedMs);
             setTimeout(() => {
@@ -609,12 +542,14 @@ function prepareGrandFinale() {
         }
 
         const currentWord = sequenceSteps[stepIdx];
-        morphFirefliesToWord(currentWord);
+        showClearSequenceWord(currentWord);
         playTone(stepIdx < 3 ? 523 + stepIdx * 65 : 698 + (stepIdx - 3) * 55, 0.16);
+        const { cx, cy } = getCenterTarget();
+        burstSparkles(cx, cy, 14);
         stepIdx++;
 
         setTimeout(() => {
-            scatterFirefliesBurst();
+            hideClearSequenceWord();
             setTimeout(runNextSequenceWord, perWordSlotMs - holdDurationMs);
         }, holdDurationMs);
     }
@@ -623,6 +558,7 @@ function prepareGrandFinale() {
 }
 
 function revealHeartAndLanterns(sequenceStartTime) {
+    hideClearSequenceWord();
     morphFirefliesToHeart();
     playTone(1046, 0.28);
 
@@ -635,7 +571,7 @@ function revealHeartAndLanterns(sequenceStartTime) {
         requestAnimationFrame(() => {
             innerText.classList.add('visible-heart-text');
         });
-    }, 900);
+    }, 850);
 
     const elapsedMs = performance.now() - sequenceStartTime;
     const waitToLanternMs = Math.max(950, LANTERNS_RISE_AT_SEC * 1000 - elapsedMs);
@@ -675,19 +611,19 @@ function revealHeartAndLanterns(sequenceStartTime) {
     }, waitToLanternMs);
 }
 
-// Jalur lampion menyesuaikan otomatis apakah HP atau Laptop agar tidak menabrak elemen lain
 function spawnSingleSkyLantern(wishObj) {
     const layer = document.getElementById('sky-lanterns-layer');
     const lantern = document.createElement('div');
     lantern.className = 'sky-lantern';
 
     const mobile = isMobileDevice();
-    const lanes = mobile ? [18, 42, 68, 84] : [42, 56, 70, 82];
+    // Di HP potret, lampion difokuskan ke pinggir kanan & kiri atas agar tidak menutupi tulisan tengah hati
+    const lanes = mobile ? [8, 76, 84] : [44, 58, 72, 84];
     const baseLeft = lanes[laneIndex % lanes.length];
     laneIndex++;
-    const leftPercent = baseLeft + (Math.random() * 4 - 2);
+    const leftPercent = baseLeft + (Math.random() * 3 - 1.5);
     const duration = 11 + Math.random() * 4;
-    const driftX = (Math.random() - 0.5) * 42;
+    const driftX = (Math.random() - 0.5) * 32;
 
     lantern.style.left = leftPercent + 'vw';
     lantern.style.setProperty('--drift-x', driftX + 'px');
