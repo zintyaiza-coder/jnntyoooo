@@ -46,38 +46,99 @@
         <span class="flower-item" style="animation-delay: 1.5s;">🌸</span>
     </div>
 
-    <!-- Panggung Utama -->
-    <div class="stage">
-        <!-- Karakter Anak Ekspresif (Tetap Menemani Sampai Ending!) -->
-        <div class="char-box" id="kid-char" onclick="cheerCharacter()" title="Klik aku!">
-            <svg viewBox="0 0 160 170" width="168" height="175">
-                <circle cx="80" cy="88" r="62" fill="rgba(255, 202, 58, 0.24)"/>
-                <path d="M44 112 Q80 96 116 112 L126 165 L34 165 Z" fill="#FF595E"/>
-                <circle cx="80" cy="136" r="14" fill="#FFCA3A"/>
-                <polygon points="80,125 83,132 91,132 85,137 87,145 80,140 73,145 75,137 69,132 77,132" fill="#FFF"/>
-                <path d="M44 114 Q24 132 34 149" stroke="#FFD1AA" stroke-width="14" stroke-linecap="round" fill="none"/>
+    <!-- Dua Karakter Anak di Sebelah Kiri Bawah (Berdiri Menemani & Melihat Lampion) -->
+    <div class="companions-dock" id="companions-dock" onclick="cheerCharacter()" title="Klik teman-temanmu!">
+        <!-- Anak 1: Memegang Balon -->
+        <div class="char-unit char-balloon">
+            <svg viewBox="0 0 175 215" width="136" height="168">
+                <g class="balloon-float">
+                    <path d="M35 72 Q28 106 38 136" stroke="#FFF9DB" stroke-width="2" fill="none"/>
+                    <ellipse cx="34" cy="42" rx="24" ry="29" fill="#FF6B8B"/>
+                    <ellipse cx="26" cy="32" rx="6" ry="10" fill="rgba(255,255,255,0.45)" transform="rotate(-18 26 32)"/>
+                    <polygon points="34,71 29,77 39,77" fill="#FF6B8B"/>
+                </g>
+
+                <circle cx="98" cy="118" r="56" fill="rgba(255, 224, 102, 0.16)"/>
+                <rect x="80" y="168" width="12" height="28" rx="6" fill="#FFD1AA"/>
+                <rect x="104" y="168" width="12" height="28" rx="6" fill="#FFD1AA"/>
+                <rect x="75" y="191" width="20" height="10" rx="5" fill="#4EA8DE"/>
+                <rect x="101" y="191" width="20" height="10" rx="5" fill="#4EA8DE"/>
+
+                <path d="M68 124 Q98 110 128 124 L136 174 L60 174 Z" fill="#FF6B6B"/>
+                <circle cx="98" cy="146" r="11" fill="#FFD166"/>
+                <polygon points="98,138 100,143 106,143 101,147 103,152 98,149 93,152 95,147 90,143 96,143" fill="#FFF"/>
+
+                <path d="M68 128 Q46 130 38 136" stroke="#FFD1AA" stroke-width="11" stroke-linecap="round" fill="none"/>
+                <circle cx="38" cy="136" r="7.5" fill="#FFD1AA"/>
+
                 <g class="arm-wave">
-                    <path d="M116 114 Q142 84 136 62" stroke="#FFD1AA" stroke-width="14" stroke-linecap="round" fill="none"/>
-                    <circle cx="136" cy="60" r="9.5" fill="#FFD1AA"/>
+                    <path d="M128 128 Q150 104 146 84" stroke="#FFD1AA" stroke-width="11" stroke-linecap="round" fill="none"/>
+                    <circle cx="146" cy="82" r="7.5" fill="#FFD1AA"/>
                 </g>
-                <circle cx="80" cy="68" r="39" fill="#FFD1AA"/>
-                <path d="M41 62 C41 24, 119 24, 119 62 C110 44, 50 44, 41 62 Z" fill="#3B282A"/>
-                <path d="M44 47 Q80 12 116 47 Z" fill="#1982C4"/>
-                <polygon points="80,18 82,23 88,23 83,26 85,32 80,28 75,32 77,26 72,23 78,23" fill="#FFCA3A"/>
-                <rect x="38" y="44" width="88" height="8" rx="4" fill="#FFCA3A"/>
+
+                <circle cx="98" cy="88" r="34" fill="#FFD1AA"/>
+                <path d="M64 83 C64 48, 132 48, 132 83 C124 67, 72 67, 64 83 Z" fill="#3B282A"/>
+                <path d="M67 69 Q98 38 129 69 Z" fill="#4EA8DE"/>
+                <rect x="62" y="66" width="76" height="7" rx="3.5" fill="#FFD166"/>
+
                 <g class="eyes">
-                    <circle cx="66" cy="68" r="5.5" fill="#22223B"/>
-                    <circle cx="68" cy="66" r="2" fill="#FFF"/>
-                    <circle cx="94" cy="68" r="5.5" fill="#22223B"/>
-                    <circle cx="96" cy="66" r="2" fill="#FFF"/>
+                    <circle cx="86" cy="88" r="4.5" fill="#22223B"/>
+                    <circle cx="87.5" cy="86.5" r="1.6" fill="#FFF"/>
+                    <circle cx="110" cy="88" r="4.5" fill="#22223B"/>
+                    <circle cx="111.5" cy="86.5" r="1.6" fill="#FFF"/>
                 </g>
-                <ellipse cx="56" cy="78" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.75"/>
-                <ellipse cx="104" cy="78" rx="6.5" ry="4" fill="#FF8FA3" opacity="0.75"/>
-                <path id="kid-mouth" d="M67 80 Q80 96 93 80 Z" fill="#FFFFFF" stroke="#22223B" stroke-width="2.5"/>
+                <ellipse cx="77" cy="96" rx="5.5" ry="3.2" fill="#FF8FA3" opacity="0.7"/>
+                <ellipse cx="119" cy="96" rx="5.5" ry="3.2" fill="#FF8FA3" opacity="0.7"/>
+                <path id="kid-mouth" d="M87 98 Q98 111 109 98 Z" fill="#FFFFFF" stroke="#22223B" stroke-width="2.2"/>
             </svg>
         </div>
 
-        <span class="buddy-badge" id="buddy-note">🤗 Aku tetap di sini menemanimu, kamu gak sendirian!</span>
+        <!-- Anak 2: Membawa Permen Lolipop -->
+        <div class="char-unit char-candy">
+            <svg viewBox="0 0 175 215" width="132" height="164">
+                <circle cx="80" cy="122" r="54" fill="rgba(144, 224, 239, 0.16)"/>
+                <rect x="63" y="170" width="11" height="26" rx="5.5" fill="#FFD1AA"/>
+                <rect x="86" y="170" width="11" height="26" rx="5.5" fill="#FFD1AA"/>
+                <rect x="59" y="191" width="19" height="10" rx="5" fill="#9D4EDD"/>
+                <rect x="84" y="191" width="19" height="10" rx="5" fill="#9D4EDD"/>
+
+                <path d="M52 128 Q80 115 108 128 L116 175 L44 175 Z" fill="#57CC99"/>
+                <circle cx="80" cy="148" r="9" fill="#FFF3BF"/>
+
+                <path d="M52 132 Q36 148 44 162" stroke="#FFD1AA" stroke-width="10.5" stroke-linecap="round" fill="none"/>
+
+                <g class="candy-sway">
+                    <path d="M108 132 Q128 136 136 124" stroke="#FFD1AA" stroke-width="10.5" stroke-linecap="round" fill="none"/>
+                    <circle cx="136" cy="124" r="7" fill="#FFD1AA"/>
+                    <line x1="136" y1="124" x2="144" y2="86" stroke="#FFF" stroke-width="4" stroke-linecap="round"/>
+                    <circle cx="146" cy="70" r="20" fill="#FF8FA3" stroke="#FFF" stroke-width="2.5"/>
+                    <path d="M146 70 m-12 0 a12 12 0 1 0 24 0 a8 8 0 1 0 -16 0 a4 4 0 1 0 8 0" fill="none" stroke="#FFF3BF" stroke-width="3" stroke-linecap="round"/>
+                </g>
+
+                <circle cx="48" cy="76" r="13" fill="#4A2C2A"/>
+                <circle cx="112" cy="76" r="13" fill="#4A2C2A"/>
+                <circle cx="80" cy="92" r="32" fill="#FFD1AA"/>
+                <path d="M48 88 C48 54, 112 54, 112 88 C104 71, 56 71, 48 88 Z" fill="#4A2C2A"/>
+                <circle cx="57" cy="69" r="5" fill="#FFD166"/>
+                <circle cx="103" cy="69" r="5" fill="#FFD166"/>
+
+                <g class="eyes">
+                    <circle cx="69" cy="92" r="4.3" fill="#22223B"/>
+                    <circle cx="70.5" cy="90.5" r="1.5" fill="#FFF"/>
+                    <circle cx="91" cy="92" r="4.3" fill="#22223B"/>
+                    <circle cx="92.5" cy="90.5" r="1.5" fill="#FFF"/>
+                </g>
+                <ellipse cx="61" cy="100" rx="5" ry="3" fill="#FF8FA3" opacity="0.72"/>
+                <ellipse cx="99" cy="100" rx="5" ry="3" fill="#FF8FA3" opacity="0.72"/>
+                <path d="M71 102 Q80 112 89 102" fill="none" stroke="#22223B" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <div class="buddy-bubble" id="buddy-note">🎈 Aku bawa balon & temanku bawa permen buat nemenin kamu!</div>
+    </div>
+
+    <!-- Panggung Utama -->
+    <div class="stage" id="main-stage">
 
         <!-- STEP 1: KENALAN NAMA & PINTU KEJUTAN -->
         <div class="magic-card" id="step-1">
@@ -92,7 +153,7 @@
             </div>
 
             <button class="gift-trigger" onclick="startJourney()" aria-label="Buka Kado">🎁</button>
-            <p style="font-size: 0.85rem; font-weight: 800; opacity: 0.75;">Isi namamu lalu ketuk kadonya untuk mulai ✨</p>
+            <p style="font-size: 0.85rem; font-weight: 800; opacity: 0.78;">Isi namamu lalu ketuk kadonya untuk mulai ✨</p>
             <div class="sender-note" id="sender-footer">Dibuat dengan penuh cinta dari sesama anak untuk anak-anak hebat 💛</div>
         </div>
 
@@ -118,20 +179,20 @@
 
             <div class="tree-stage">
                 <svg viewBox="0 0 330 295" width="330" height="295">
-                    <circle cx="165" cy="115" r="95" fill="#FFCA3A" opacity="0.18"/>
+                    <circle cx="165" cy="115" r="95" fill="#FFD166" opacity="0.18"/>
                     <path d="M138 282 Q150 205 134 152 L196 152 Q180 205 192 282 Z" fill="#7F4F24"/>
                     <path d="M148 182 L96 126 M182 178 L234 124" stroke="#7F4F24" stroke-width="14" stroke-linecap="round"/>
-                    <circle cx="165" cy="100" r="78" fill="#40916C"/>
-                    <circle cx="105" cy="118" r="56" fill="#74C69D"/>
-                    <circle cx="225" cy="118" r="56" fill="#74C69D"/>
-                    <circle cx="132" cy="68" r="52" fill="#95D5B2"/>
-                    <circle cx="198" cy="68" r="52" fill="#95D5B2"/>
-                    <circle cx="115" cy="280" r="6" fill="#FF595E"/>
-                    <circle cx="215" cy="280" r="6" fill="#FFCA3A"/>
+                    <circle cx="165" cy="100" r="78" fill="#57CC99"/>
+                    <circle cx="105" cy="118" r="56" fill="#80ED99"/>
+                    <circle cx="225" cy="118" r="56" fill="#80ED99"/>
+                    <circle cx="132" cy="68" r="52" fill="#A7F3D0"/>
+                    <circle cx="198" cy="68" r="52" fill="#A7F3D0"/>
+                    <circle cx="115" cy="280" r="6" fill="#FF6B6B"/>
+                    <circle cx="215" cy="280" r="6" fill="#FFD166"/>
                 </svg>
 
                 <div class="lantern-zone" id="lantern-zone">
-                    <div class="wish-lantern" style="top: 16px; left: 82px; background: #FFCA3A;" onclick="showLanternMsg('Semoga semua anak bisa belajar sambil tersenyum bahagia! 😊')">
+                    <div class="wish-lantern" style="top: 16px; left: 82px; background: #FFD166;" onclick="showLanternMsg('Semoga semua anak bisa belajar sambil tersenyum bahagia! 😊')">
                         ⭐ Semua anak bahagia
                     </div>
                 </div>
@@ -161,12 +222,12 @@
             <div class="breathing-orb">✨🕯️✨</div>
         </div>
 
-        <!-- STEP 4: GRAND FINALE DENGAN LAMPION & KARAKTER TEMAN -->
-        <div class="magic-card hidden" id="step-4">
+        <!-- STEP 4: ENDING DI SEBELAH KIRI (LANGIT & LAMPION TERLIHAT JELAS DI TENGAH-KANAN) -->
+        <div class="magic-card ending-left-card hidden" id="step-4">
             <span class="tag-pill">SELAMAT HARI ANAK SEDUNIA 🏮</span>
             <h1 id="ending-title">Teruslah Bersinar, Sahabat! 🌟</h1>
             <p class="story-text" id="ending-intro">
-                Lihat ke atas—lampion-lampion harapan sedang terbang membawa doa dan mimpimu ke langit malam. Kamu gak pernah sendirian, karena ada jutaan anak dan sahabat yang ikut mendoakanmu!
+                Lihat lampion-lampion yang terbang di langit malam—semuanya membawa doa dan mimpimu. Kamu gak sendirian, kami menemanimu di sini!
             </p>
 
             <div class="ending-hope-box">
@@ -176,11 +237,11 @@
 
             <div class="hug-box" id="hug-box"></div>
 
-            <div class="btn-row">
-                <button class="btn-magic btn-coral" onclick="launchSkyLanternWave()">🏮 Terbangkan Lampion Lagi</button>
-                <button class="btn-magic btn-berry" onclick="cycleEndingHope()">✨ Harapan Lainnya</button>
-                <button class="btn-magic btn-meadow" onclick="sendWarmHug()">🤗 Simpan Pelukan Ini</button>
-                <button class="btn-magic btn-ocean" onclick="location.reload()">🔄 Main Lagi</button>
+            <div class="btn-row ending-btn-row">
+                <button class="btn-magic btn-coral" onclick="launchSkyLanternWave()">🏮 Lampion Lagi</button>
+                <button class="btn-magic btn-berry" onclick="cycleEndingHope()">✨ Harapan Lain</button>
+                <button class="btn-magic btn-meadow" onclick="sendWarmHug()">🤗 Simpan Pelukan</button>
+                <button class="btn-magic btn-ocean" onclick="location.reload()">🔄 Ulangi</button>
             </div>
             <div class="sender-note" id="ending-sender">Pelukan hangat dari sesama anak untukmu — kita bertaut dalam harapan 💫</div>
         </div>
