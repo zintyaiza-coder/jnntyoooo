@@ -1,13 +1,13 @@
 :root {
-    --sky-1: #4CC9F0;
-    --sky-2: #B8F2E6;
+    --sky-1: #64DFDF;
+    --sky-2: #C7F9CC;
     --sky-3: #FFF3B0;
-    --hill-back: #74C69D;
-    --hill-front: #40916C;
-    --coral: #FF595E;
-    --sunny: #FFCA3A;
-    --ocean: #1982C4;
-    --berry: #8338EC;
+    --hill-back: #80ED99;
+    --hill-front: #57CC99;
+    --coral: #FF6B6B;
+    --sunny: #FFD166;
+    --ocean: #4EA8DE;
+    --berry: #9D4EDD;
 }
 
 * {
@@ -25,16 +25,19 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 18px 14px 44px;
+    padding: 18px 16px 36px;
     position: relative;
-    color: #22223B;
-    background: linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 55%, var(--sky-3) 100%);
-    transition: background 2.2s ease;
+    color: #2B2D42;
+    background: linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 54%, var(--sky-3) 100%);
+    transition: background 2.4s cubic-bezier(0.22, 1, 0.36, 1), padding 0.8s ease;
 }
 
 body.night-magic {
-    background: radial-gradient(circle at 50% 18%, #2B1954 0%, #150D2E 60%, #090614 100%);
+    background: radial-gradient(circle at 68% 20%, #2C1E5A 0%, #160F30 58%, #090616 100%);
     color: #F8F9FA;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 64px 24px 24px;
 }
 
 /* Lapisan Langit & Alam */
@@ -49,43 +52,43 @@ body.night-magic {
 .rainbow {
     position: fixed;
     top: 8%;
-    left: 50%;
+    left: 55%;
     transform: translateX(-50%);
-    width: 560px;
-    height: 280px;
-    border-radius: 280px 280px 0 0;
+    width: 580px;
+    height: 290px;
+    border-radius: 290px 290px 0 0;
     background: transparent;
     box-shadow:
-        inset 0 14px 0 rgba(255, 89, 94, 0.35),
-        inset 0 28px 0 rgba(255, 202, 58, 0.35),
-        inset 0 42px 0 rgba(138, 201, 38, 0.35),
-        inset 0 56px 0 rgba(25, 130, 196, 0.35),
-        inset 0 70px 0 rgba(131, 56, 236, 0.32);
-    filter: blur(2px);
-    opacity: 0.75;
-    transition: opacity 1.6s ease;
+        inset 0 14px 0 rgba(255, 107, 107, 0.28),
+        inset 0 28px 0 rgba(255, 209, 102, 0.28),
+        inset 0 42px 0 rgba(128, 237, 153, 0.28),
+        inset 0 56px 0 rgba(78, 168, 222, 0.28),
+        inset 0 70px 0 rgba(157, 78, 221, 0.24);
+    filter: blur(3px);
+    opacity: 0.72;
+    transition: opacity 1.8s ease;
 }
 
 body.night-magic .rainbow {
-    opacity: 0.05;
+    opacity: 0.04;
 }
 
 .sun-moon {
     position: fixed;
-    top: 24px;
-    right: 28px;
+    top: 26px;
+    right: 34px;
     width: 78px;
     height: 78px;
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #FFF9DB, #FFCA3A 70%, #F77F00);
-    box-shadow: 0 0 35px rgba(255, 202, 58, 0.85), 0 0 80px rgba(255, 202, 58, 0.45);
-    transition: all 1.8s ease;
+    background: radial-gradient(circle at 35% 35%, #FFF9DB, #FFD166 70%, #F77F00);
+    box-shadow: 0 0 38px rgba(255, 209, 102, 0.75), 0 0 85px rgba(255, 209, 102, 0.4);
+    transition: all 2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 body.night-magic .sun-moon {
     background: radial-gradient(circle at 30% 30%, #FFFFFF, #FFF3BF 75%, #FFE066);
-    box-shadow: 0 0 35px #FFF, 0 0 80px rgba(255, 224, 102, 0.75);
-    transform: scale(0.92);
+    box-shadow: 0 0 40px #FFF, 0 0 90px rgba(255, 224, 102, 0.75);
+    transform: scale(0.95);
 }
 
 .twinkle-star {
@@ -94,20 +97,20 @@ body.night-magic .sun-moon {
     background: #FFF;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 1.8s ease;
-    animation: twinkle 2.4s infinite ease-in-out;
+    transition: opacity 2s ease;
+    animation: twinkle 3s infinite ease-in-out;
 }
 
 body.night-magic .twinkle-star {
-    opacity: 0.92;
+    opacity: 0.9;
 }
 
 @keyframes twinkle {
-    0%, 100% { transform: scale(0.7); opacity: 0.4; }
-    50% { transform: scale(1.35); opacity: 1; }
+    0%, 100% { transform: scale(0.75); opacity: 0.35; }
+    50% { transform: scale(1.3); opacity: 1; }
 }
 
-/* Lampion Berterbangan di Ending */
+/* Lampion Berterbangan di Tengah & Kanan Layar */
 .sky-lanterns-layer {
     position: fixed;
     inset: 0;
@@ -118,77 +121,77 @@ body.night-magic .twinkle-star {
 
 .sky-lantern {
     position: fixed;
-    bottom: -100px;
+    bottom: -110px;
     display: flex;
     flex-direction: column;
     align-items: center;
     animation: flyLanternUp linear forwards;
-    filter: drop-shadow(0 0 14px rgba(255, 183, 3, 0.85));
+    filter: drop-shadow(0 0 16px rgba(255, 190, 11, 0.85));
 }
 
 .lantern-dome {
-    min-width: 68px;
-    max-width: 175px;
-    padding: 9px 12px;
-    border-radius: 22px 22px 12px 12px;
-    background: radial-gradient(circle at 50% 25%, #FFF3BF, #FFCA3A 60%, #F77F00 100%);
+    min-width: 76px;
+    max-width: 185px;
+    padding: 10px 13px;
+    border-radius: 24px 24px 13px 13px;
+    background: radial-gradient(circle at 50% 25%, #FFF9DB, #FFD166 60%, #F77F00 100%);
     border: 1.5px solid rgba(255, 255, 255, 0.85);
     color: #4A2500;
-    font-size: 0.74rem;
+    font-size: 0.76rem;
     font-weight: 800;
     text-align: center;
-    line-height: 1.3;
-    box-shadow: inset 0 -6px 12px rgba(214, 40, 40, 0.25);
+    line-height: 1.32;
+    box-shadow: inset 0 -6px 14px rgba(214, 40, 40, 0.22);
 }
 
 .lantern-author {
     display: block;
     margin-top: 3px;
-    font-size: 0.66rem;
-    color: #7F2CCB;
+    font-size: 0.67rem;
+    color: #7209B7;
     font-weight: 800;
 }
 
 .lantern-flame {
     width: 8px;
-    height: 10px;
+    height: 11px;
     margin-top: 2px;
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
     background: #FFF9DB;
-    box-shadow: 0 0 10px #FFCA3A, 0 0 18px #FF7B00;
-    animation: flickerFlame 0.35s infinite alternate;
+    box-shadow: 0 0 12px #FFD166, 0 0 22px #FF7B00;
+    animation: flickerFlame 0.45s infinite alternate;
 }
 
 @keyframes flickerFlame {
-    0% { transform: scale(0.9); opacity: 0.85; }
-    100% { transform: scale(1.15); opacity: 1; }
+    0% { transform: scale(0.92); opacity: 0.85; }
+    100% { transform: scale(1.12); opacity: 1; }
 }
 
 @keyframes flyLanternUp {
     0% {
-        transform: translateY(0) translateX(0) rotate(-3deg) scale(0.85);
+        transform: translateY(0) translateX(0) rotate(-2deg) scale(0.88);
         opacity: 0;
     }
     12% {
         opacity: 1;
     }
     50% {
-        transform: translateY(-52vh) translateX(var(--drift-x, 24px)) rotate(3deg) scale(1);
+        transform: translateY(-54vh) translateX(var(--drift-x, 22px)) rotate(2.5deg) scale(1);
         opacity: 0.96;
     }
     100% {
-        transform: translateY(-118vh) translateX(calc(var(--drift-x, 24px) * -0.6)) rotate(-2deg) scale(0.92);
+        transform: translateY(-118vh) translateX(calc(var(--drift-x, 22px) * -0.5)) rotate(-2deg) scale(0.94);
         opacity: 0;
     }
 }
 
 .cloud {
     position: fixed;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.88);
     border-radius: 999px;
-    box-shadow: 0 8px 20px rgba(25, 130, 196, 0.08);
+    box-shadow: 0 8px 24px rgba(78, 168, 222, 0.08);
     animation: driftCloud linear infinite;
-    transition: opacity 1.4s ease;
+    transition: opacity 1.6s ease;
 }
 .cloud::before, .cloud::after {
     content: '';
@@ -196,11 +199,11 @@ body.night-magic .twinkle-star {
     background: inherit;
     border-radius: 999px;
 }
-.c1 { width: 115px; height: 38px; top: 11%; left: -140px; animation-duration: 30s; }
+.c1 { width: 115px; height: 38px; top: 11%; left: -140px; animation-duration: 34s; }
 .c1::before { width: 52px; height: 52px; top: -25px; left: 18px; }
 .c1::after { width: 40px; height: 40px; top: -16px; right: 18px; }
 
-.c2 { width: 145px; height: 46px; top: 22%; left: -170px; animation-duration: 38s; animation-delay: 6s; }
+.c2 { width: 145px; height: 46px; top: 22%; left: -170px; animation-duration: 42s; animation-delay: 6s; }
 .c2::before { width: 62px; height: 62px; top: -30px; left: 25px; }
 .c2::after { width: 48px; height: 48px; top: -20px; right: 24px; }
 
@@ -210,7 +213,7 @@ body.night-magic .twinkle-star {
 }
 
 body.night-magic .cloud {
-    opacity: 0.1;
+    opacity: 0.08;
 }
 
 /* Bukit & Taman bawah */
@@ -219,7 +222,7 @@ body.night-magic .cloud {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 26vh;
+    height: 24vh;
     pointer-events: none;
     z-index: 1;
 }
@@ -232,7 +235,7 @@ body.night-magic .cloud {
     height: 100%;
     background: var(--hill-back);
     border-radius: 65% 55% 0 0 / 45% 45% 0 0;
-    transition: background 1.8s ease;
+    transition: background 2s ease;
 }
 
 .hill-front {
@@ -240,10 +243,10 @@ body.night-magic .cloud {
     bottom: -10px;
     right: -10%;
     width: 120%;
-    height: 78%;
-    background: linear-gradient(180deg, #52B788 0%, var(--hill-front) 100%);
+    height: 76%;
+    background: linear-gradient(180deg, #6EDE8A 0%, var(--hill-front) 100%);
     border-radius: 50% 65% 0 0 / 50% 50% 0 0;
-    transition: background 1.8s ease;
+    transition: background 2s ease;
 }
 
 body.night-magic .hill-back { background: #1B4332; }
@@ -251,7 +254,7 @@ body.night-magic .hill-front { background: linear-gradient(180deg, #163628 0%, #
 
 .flowers-row {
     position: fixed;
-    bottom: 12px;
+    bottom: 10px;
     left: 0;
     width: 100%;
     display: flex;
@@ -259,190 +262,240 @@ body.night-magic .hill-front { background: linear-gradient(180deg, #163628 0%, #
     padding: 0 12px;
     pointer-events: none;
     z-index: 2;
-    font-size: 20px;
+    font-size: 19px;
 }
 
 .flower-item {
     display: inline-block;
     transform-origin: bottom center;
-    animation: swayFlower 3.2s ease-in-out infinite;
+    animation: swayFlower 3.6s ease-in-out infinite;
 }
 
 @keyframes swayFlower {
-    0%, 100% { transform: rotate(-6deg); }
-    50% { transform: rotate(7deg); }
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(6deg); }
 }
 
 /* Musik Pill */
 .music-pill {
     position: fixed;
     top: 16px;
-    left: 16px;
+    left: 18px;
     z-index: 60;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(8px);
-    border: 2.5px solid var(--coral);
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(255, 107, 107, 0.55);
     color: var(--coral);
     font-family: 'Fredoka', sans-serif;
     font-size: 0.82rem;
     padding: 7px 14px;
     border-radius: 999px;
     cursor: pointer;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-    transition: transform 0.2s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: transform 0.25s ease;
 }
 .music-pill:hover { transform: scale(1.04); }
 
-/* Panggung Utama */
-.stage {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    max-width: 560px;
+/* DOCK DUA ANAK DI SEBELAH KIRI BAWAH */
+.companions-dock {
+    position: fixed;
+    left: 18px;
+    bottom: 16px;
+    z-index: 25;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Karakter Anak Hidup */
-.char-box {
-    width: 168px;
-    height: 175px;
-    margin-bottom: -18px;
-    z-index: 15;
+    align-items: flex-end;
+    gap: 2px;
     cursor: pointer;
-    animation: enterHop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1), idleBob 2.6s ease-in-out 0.9s infinite;
-    filter: drop-shadow(0 10px 14px rgba(0,0,0,0.16));
+    animation: companionsEnter 1s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,0.18));
 }
 
-.char-box.excited {
-    animation: jumpExcited 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+@keyframes companionsEnter {
+    0% { transform: translateX(-140px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
 }
 
-.buddy-badge {
-    display: none;
-    margin-top: 6px;
-    margin-bottom: 10px;
-    padding: 5px 14px;
-    border-radius: 999px;
-    background: rgba(255, 209, 102, 0.22);
-    border: 1.5px solid rgba(255, 209, 102, 0.65);
-    color: #FFE066;
-    font-size: 0.82rem;
-    font-weight: 800;
-    text-align: center;
+.char-unit {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-body.night-magic .buddy-badge {
-    display: inline-block;
+.char-balloon {
+    animation: gentleSway 3.8s ease-in-out infinite;
 }
 
-@keyframes enterHop {
-    0% { transform: translateX(-120vw) rotate(-15deg); opacity: 0; }
-    100% { transform: translateX(0) rotate(0deg); opacity: 1; }
+.char-candy {
+    margin-left: -18px;
+    animation: gentleSway 4.2s ease-in-out 0.6s infinite;
 }
 
-@keyframes idleBob {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-7px); }
+.companions-dock.excited .char-unit {
+    animation: gentleHop 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes jumpExcited {
-    0% { transform: translateY(0) scale(1); }
-    40% { transform: translateY(-22px) scale(1.08, 0.95); }
-    100% { transform: translateY(0) scale(1); }
+@keyframes gentleSway {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(1.2deg); }
+}
+
+@keyframes gentleHop {
+    0% { transform: translateY(0); }
+    45% { transform: translateY(-14px); }
+    100% { transform: translateY(0); }
+}
+
+.balloon-float {
+    transform-origin: 38px 136px;
+    animation: balloonDrift 3.2s ease-in-out infinite;
+}
+
+@keyframes balloonDrift {
+    0%, 100% { transform: rotate(-4deg) translateY(0); }
+    50% { transform: rotate(5deg) translateY(-4px); }
+}
+
+.candy-sway {
+    transform-origin: 108px 132px;
+    animation: candyTilt 3s ease-in-out infinite;
+}
+
+@keyframes candyTilt {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(4deg); }
 }
 
 .arm-wave {
-    transform-origin: 112px 108px;
-    animation: waveLoop 1.5s ease-in-out infinite;
+    transform-origin: 128px 128px;
+    animation: waveLoop 2.2s ease-in-out infinite;
 }
 @keyframes waveLoop {
     0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(-26deg); }
+    50% { transform: rotate(-18deg); }
 }
 
 .eyes {
-    transform-origin: 80px 68px;
-    animation: eyeBlinkLoop 4.2s infinite;
+    transform-origin: 90px 90px;
+    animation: eyeBlinkLoop 4.5s infinite;
 }
 @keyframes eyeBlinkLoop {
     0%, 93%, 100% { transform: scaleY(1); }
     96% { transform: scaleY(0.08); }
 }
 
-/* Panel Cerita / Kartu Ajaib */
+.buddy-bubble {
+    position: absolute;
+    bottom: 168px;
+    left: 6px;
+    width: 240px;
+    padding: 8px 12px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(10px);
+    color: #2B2D42;
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1.38;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    transition: all 0.5s ease;
+}
+
+body.night-magic .buddy-bubble {
+    background: rgba(29, 20, 56, 0.72);
+    border: 1px solid rgba(255, 209, 102, 0.45);
+    color: #FFF3BF;
+}
+
+/* Panggung Utama */
+.stage {
+    position: relative;
+    z-index: 15;
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Kartu Cerita Lembut & Luwes (Tidak Kaku) */
 .magic-card {
     width: 100%;
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(12px);
-    border: 4px solid var(--sunny);
-    border-radius: 32px;
-    padding: 26px 22px 22px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(14px);
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    border-radius: 28px;
+    padding: 24px 22px 20px;
     text-align: center;
-    box-shadow: 0 20px 45px rgba(25, 42, 86, 0.16), inset 0 0 0 2px rgba(255,255,255,0.8);
+    box-shadow: 0 18px 42px rgba(25, 42, 86, 0.12);
     position: relative;
-    animation: cardPop 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
-    transition: background 1.6s ease, border-color 1.6s ease, color 1.6s ease;
+    animation: cardFadeSoft 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: background 1.4s ease, border-color 1.4s ease, color 1.4s ease;
 }
 
-body.night-magic .magic-card {
-    background: rgba(28, 19, 54, 0.92);
-    border-color: #FFD166;
+/* Kartu Ending ditaruh di Sebelah Kiri supaya Latar & Lampion Terlihat Penuh */
+.magic-card.ending-left-card {
+    max-width: 410px;
+    text-align: left;
+    padding: 18px 20px 16px;
+    background: rgba(24, 16, 48, 0.56);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 209, 102, 0.35);
     color: #F8F9FA;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 209, 102, 0.22);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
 }
 
-@keyframes cardPop {
-    0% { transform: scale(0.9); translateY(14px); opacity: 0; }
-    100% { transform: scale(1) translateY(0); opacity: 1; }
+@keyframes cardFadeSoft {
+    0% { transform: translateY(14px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
 }
 
 .tag-pill {
     display: inline-block;
-    background: linear-gradient(90deg, var(--coral), #FF8FA3);
+    background: linear-gradient(90deg, #FF6B6B, #FF8FA3);
     color: #FFF;
     font-weight: 800;
-    font-size: 0.76rem;
+    font-size: 0.72rem;
     letter-spacing: 0.5px;
-    padding: 5px 14px;
+    padding: 4px 12px;
     border-radius: 999px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 12px rgba(255, 89, 94, 0.3);
+    margin-bottom: 8px;
 }
 
 h1 {
     font-family: 'Fredoka', sans-serif;
-    font-size: 1.72rem;
+    font-size: 1.62rem;
     color: var(--coral);
-    line-height: 1.22;
-    margin-bottom: 10px;
+    line-height: 1.24;
+    margin-bottom: 8px;
 }
 
-body.night-magic h1 {
+.ending-left-card h1 {
+    font-size: 1.38rem;
     color: #FFD166;
-    text-shadow: 0 0 18px rgba(255, 209, 102, 0.35);
+    text-shadow: 0 0 16px rgba(255, 209, 102, 0.3);
 }
 
 .story-text {
-    font-size: 1.02rem;
-    line-height: 1.62;
+    font-size: 0.98rem;
+    line-height: 1.6;
     color: #3A3D5C;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     transition: opacity 0.25s ease;
 }
 
-body.night-magic .story-text {
-    color: #E9ECEF;
+.ending-left-card .story-text {
+    font-size: 0.88rem;
+    line-height: 1.52;
+    color: #EDF2F4;
+    margin-bottom: 10px;
 }
 
 .sender-note {
-    margin-top: 14px;
-    padding-top: 10px;
-    border-top: 1px dashed rgba(108, 117, 125, 0.25);
-    font-size: 0.8rem;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.22);
+    font-size: 0.76rem;
     font-weight: 700;
-    opacity: 0.78;
+    opacity: 0.8;
 }
 
 .name-box {
@@ -453,104 +506,111 @@ body.night-magic .story-text {
 .name-input {
     width: 100%;
     text-align: center;
-    border-color: var(--coral);
+    border-color: rgba(255, 107, 107, 0.65);
 }
 
 .breathing-orb {
     margin: 14px auto 4px;
-    font-size: 2.1rem;
+    font-size: 2rem;
     display: inline-block;
-    animation: pulseOrb 2.2s ease-in-out infinite;
+    animation: pulseOrb 2.4s ease-in-out infinite;
 }
 
 @keyframes pulseOrb {
     0%, 100% { transform: scale(0.95); opacity: 0.75; }
-    50% { transform: scale(1.18); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 1; }
 }
 
 .ending-hope-box {
-    padding: 14px 15px;
-    border-radius: 20px;
-    background: rgba(255, 202, 58, 0.16);
-    border: 1.5px dashed rgba(255, 209, 102, 0.75);
-    margin: 12px 0 12px;
-    text-align: center;
+    padding: 11px 13px;
+    border-radius: 16px;
+    background: rgba(255, 209, 102, 0.14);
+    border: 1px dashed rgba(255, 209, 102, 0.55);
+    margin: 8px 0 10px;
 }
 
 .ending-hope-label {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.7px;
     color: #FFD166;
     font-weight: 800;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .ending-hope-msg {
-    font-size: 0.98rem;
+    font-size: 0.87rem;
     font-weight: 700;
-    line-height: 1.58;
+    line-height: 1.5;
     color: #FFF9DB;
     transition: opacity 0.25s ease;
 }
 
 .hug-box {
     display: none;
-    margin: 10px 0 6px;
-    padding: 11px 14px;
-    border-radius: 18px;
+    margin: 8px 0;
+    padding: 9px 12px;
+    border-radius: 14px;
     background: rgba(116, 198, 157, 0.22);
-    border: 1.5px solid rgba(149, 213, 178, 0.7);
+    border: 1px solid rgba(149, 213, 178, 0.6);
     color: #D8F3DC;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     font-weight: 800;
 }
 
 /* Tombol Kado & Aksi */
 .gift-trigger {
-    font-size: 78px;
+    font-size: 74px;
     background: none;
     border: none;
     cursor: pointer;
     margin: 4px 0;
-    animation: giftBounce 1.3s ease-in-out infinite;
-    transition: transform 0.2s ease;
+    animation: giftFloat 2.4s ease-in-out infinite;
+    transition: transform 0.25s ease;
 }
 .gift-trigger:hover {
-    transform: scale(1.16) rotate(5deg);
+    transform: scale(1.12);
 }
 
-@keyframes giftBounce {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-12px) scale(1.05); }
+@keyframes giftFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-9px); }
 }
 
 .btn-row {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 9px;
-    margin-top: 12px;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.ending-btn-row {
+    justify-content: flex-start;
+    gap: 6px;
 }
 
 .btn-magic {
     font-family: 'Fredoka', sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     border: none;
     border-radius: 999px;
-    padding: 11px 19px;
+    padding: 10px 17px;
     color: #FFF;
     cursor: pointer;
-    transition: transform 0.15s ease, filter 0.2s ease;
-    box-shadow: 0 6px 0 rgba(0,0,0,0.18);
+    transition: transform 0.2s ease, filter 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.14);
 }
-.btn-magic:hover { filter: brightness(1.06); transform: translateY(-2px); }
-.btn-magic:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.18); }
+.ending-btn-row .btn-magic {
+    font-size: 0.78rem;
+    padding: 8px 12px;
+}
+.btn-magic:hover { filter: brightness(1.06); transform: translateY(-1.5px); }
 
 .btn-coral { background: var(--coral); }
 .btn-ocean { background: var(--ocean); }
 .btn-berry { background: var(--berry); }
-.btn-meadow { background: #2B9348; }
+.btn-meadow { background: #57CC99; }
 
 /* Pohon Harapan Ajaib */
 .tree-stage {
@@ -577,31 +637,31 @@ body.night-magic .story-text {
     font-size: 0.76rem;
     font-weight: 800;
     color: #2B2D42;
-    border: 2px solid #FFF;
-    box-shadow: 0 0 14px rgba(255, 202, 58, 0.8), 0 5px 10px rgba(0,0,0,0.15);
+    border: 1.5px solid #FFF;
+    box-shadow: 0 0 14px rgba(255, 209, 102, 0.75), 0 4px 10px rgba(0,0,0,0.12);
     cursor: pointer;
     max-width: 125px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    animation: lanternFloat 3.4s ease-in-out infinite, lanternAppear 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
-    transition: transform 0.2s ease, z-index 0s;
+    animation: lanternFloat 3.6s ease-in-out infinite, lanternAppear 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.25s ease;
 }
 
 .wish-lantern:hover {
-    transform: scale(1.2) !important;
+    transform: scale(1.16) !important;
     z-index: 30;
     max-width: 195px;
     white-space: normal;
 }
 
 @keyframes lanternFloat {
-    0%, 100% { transform: translateY(0) rotate(-3deg); }
-    50% { transform: translateY(-6px) rotate(3deg); }
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-5px) rotate(2deg); }
 }
 
 @keyframes lanternAppear {
-    0% { transform: scale(0) translateY(35px); opacity: 0; }
+    0% { transform: scale(0.6) translateY(25px); opacity: 0; }
     100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
@@ -613,26 +673,26 @@ body.night-magic .story-text {
 
 .wish-field {
     flex: 1;
-    padding: 12px 16px;
+    padding: 11px 16px;
     border-radius: 999px;
-    border: 3px solid var(--ocean);
+    border: 2px solid rgba(78, 168, 222, 0.65);
     font-family: 'Nunito', sans-serif;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.94rem;
     outline: none;
-    background: #FFF;
-    color: #22223B;
+    background: rgba(255, 255, 255, 0.95);
+    color: #2B2D42;
 }
 
 .lantern-modal {
     margin-top: 10px;
-    padding: 11px 14px;
-    border-radius: 18px;
+    padding: 10px 14px;
+    border-radius: 16px;
     background: #FFF9DB;
-    border: 2px dashed #F59F00;
+    border: 1.5px dashed #F59F00;
     color: #5C3C00;
     font-weight: 800;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     display: none;
 }
 
@@ -646,4 +706,20 @@ body.night-magic .story-text {
     height: 100%;
     pointer-events: none;
     z-index: 90;
+}
+
+/* Responsif Layar HP */
+@media (max-width: 768px) {
+    body.night-magic {
+        padding: 58px 14px 190px;
+    }
+    .magic-card.ending-left-card {
+        max-width: 100%;
+    }
+    .companions-dock {
+        left: 10px;
+        bottom: 8px;
+        transform: scale(0.84);
+        transform-origin: bottom left;
+    }
 }
