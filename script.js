@@ -4,14 +4,8 @@ const SENDER_NAME = ""; // contoh: "Zintya"
 // =========================================================================
 // PENGATURAN SINKRONISASI DETIK LAGU (lagu1.mp3)
 // =========================================================================
-// 1. Detik mulai pemutaran file lagu1.mp3 (0 = dari awal file)
 const ENDING_MUSIC_START_SEC = 0;
-
-// 2. Detik ke berapa di lagu1.mp3 kunang-kunang mulai menyatu membentuk HATI
-//    (Sekuens 3 -> 2 -> 1 -> Selamat -> Hari -> Anak -> Sedunia otomatis membagi waktu sebelum detik ini!)
 const HEART_APPEAR_AT_SEC = 9.2;
-
-// 3. Detik ke berapa di lagu1.mp3 lampion-lampion mulai terbang naik (misal saat lirik "All along I believed")
 const LANTERNS_RISE_AT_SEC = 11.4;
 // =========================================================================
 
@@ -26,6 +20,24 @@ let hopeIdx = 0;
 let dialogIdx = 0;
 let laneIndex = 0;
 let sharedAudioCtx = null;
+
+// Deteksi otomatis apakah perangkat saat ini HP atau Laptop/Desktop
+function isMobileDevice() {
+    const byWidth = window.innerWidth <= 768;
+    const byUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const byPortraitNarrow = window.innerWidth < 860 && window.innerHeight > window.innerWidth;
+    return byWidth || (byUA && byPortraitNarrow);
+}
+
+function syncDeviceLayoutMode() {
+    const mobile = isMobileDevice();
+    document.body.classList.toggle('device-mobile', mobile);
+    document.body.classList.toggle('device-desktop', !mobile);
+}
+
+syncDeviceLayoutMode();
+window.addEventListener('resize', syncDeviceLayoutMode);
+window.addEventListener('orientationchange', syncDeviceLayoutMode);
 
 (function applySenderIdentity() {
     if (SENDER_NAME.trim()) {
@@ -268,7 +280,7 @@ function addLantern() {
 }
 
 /* =========================================================================
-   EFEK HUJAN BINTANG JATUH + KUNANG-KUNANG MENYATU & BUYAR (3-2-1-SELAMAT-HARI-ANAK-SEDUNIA -> HATI)
+   EFEK HUJAN BINTANG JATUH + KUNANG-KUNANG BESAR & JELAS (3-2-1-SELAMAT-HARI-ANAK-SEDUNIA -> HATI)
    ========================================================================= */
 let fireflyAnimId = null;
 const fireflies = [];
@@ -276,23 +288,27 @@ const starRainStreams = [];
 let morphMode = 'scatter'; // 'scatter' | 'word' | 'heart'
 
 function getCenterTarget() {
-    const isMobile = window.innerWidth <= 768;
+    const mobile = isMobileDevice();
     return {
-        cx: isMobile ? window.innerWidth * 0.5 : window.innerWidth * 0.58,
-        cy: isMobile ? window.innerHeight * 0.56 : window.innerHeight * 0.45
+        cx: mobile ? window.innerWidth * 0.5 : window.innerWidth * 0.58,
+        cy: mobile ? window.innerHeight * 0.56 : window.innerHeight * 0.45
     };
 }
 
-// Ambil koordinat titik-titik dari teks (untuk 3, 2, 1, Selamat, Hari, Anak, Sedunia)
 function sampleTextPoints(word) {
     const off = document.createElement('canvas');
     const oCtx = off.getContext('2d');
-    const w = Math.min(760, Math.floor(window.innerWidth * 0.85));
-    const h = 220;
+    const mobile = isMobileDevice();
+    const w = Math.min(820, Math.floor(window.innerWidth * (mobile ? 0.94 : 0.86)));
+    const h = 230;
     off.width = w;
     off.height = h;
 
-    const fontSize = word.length === 1 ? 148 : (word.length <= 4 ? 115 : 88);
+    // Ukuran diperbesar agar 3-2-1-Selamat-Hari-Anak-Sedunia lebih gagah & mudah dibaca
+    const fontSize = mobile
+        ? (word.length === 1 ? 132 : (word.length <= 4 ? 92 : 68))
+        : (word.length === 1 ? 176 : (word.length <= 4 ? 138 : 106));
+
     oCtx.fillStyle = '#FFFFFF';
     oCtx.font = `700 ${fontSize}px Fredoka, sans-serif`;
     oCtx.textAlign = 'center';
@@ -301,12 +317,12 @@ function sampleTextPoints(word) {
 
     const imgData = oCtx.getImageData(0, 0, w, h).data;
     const pts = [];
-    const gap = word.length === 1 ? 7 : 6;
+    const gap = word.length === 1 ? 4 : 3.5;
 
-    for (let y = 0; y < h; y += gap) {
-        for (let x = 0; x < w; x += gap) {
+    for (let y = 0; y < h; y += Math.ceil(gap)) {
+        for (let x = 0; x < w; x += Math.ceil(gap)) {
             const alpha = imgData[(y * w + x) * 4 + 3];
-            if (alpha > 140) {
+            if (alpha > 120) {
                 pts.push({ x: x - w / 2, y: y - h / 2 });
             }
         }
@@ -314,23 +330,22 @@ function sampleTextPoints(word) {
     return pts;
 }
 
-// Ambil koordinat garis hati tebal yang dirajut kunang-kunang
 function sampleHeartPoints() {
     const pts = [];
-    const isMobile = window.innerWidth <= 768;
-    const scale = isMobile ? 9.2 : 12.2;
+    const mobile = isMobileDevice();
+    const scale = mobile ? 9.8 : 13.4;
 
-    // 3 lapisan cincin hati agar terlihat rimbun dirajut kunang-kunang seperti di video
-    const rings = [0.92, 1.0, 1.08];
+    // 4 lapisan cincin hati agar bentuk hati kunang-kunang terlihat tebal dan bercahaya jelas
+    const rings = [0.88, 0.96, 1.04, 1.12];
     rings.forEach((ringScale, rIdx) => {
-        const steps = 110 + rIdx * 20;
+        const steps = 115 + rIdx * 18;
         for (let i = 0; i < steps; i++) {
             const t = (i / steps) * Math.PI * 2;
             const hx = 16 * Math.pow(Math.sin(t), 3);
             const hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
             pts.push({
-                x: hx * scale * ringScale + (Math.random() - 0.5) * 8,
-                y: hy * scale * ringScale - 12 + (Math.random() - 0.5) * 8
+                x: hx * scale * ringScale + (Math.random() - 0.5) * 6,
+                y: hy * scale * ringScale - 12 + (Math.random() - 0.5) * 6
             });
         }
     });
@@ -344,26 +359,27 @@ function initFireflyMorphEngine() {
     function syncSize() {
         fCanvas.width = window.innerWidth;
         fCanvas.height = window.innerHeight;
+        syncDeviceLayoutMode();
     }
     syncSize();
     window.addEventListener('resize', syncSize);
 
-    // 1. Siapkan hujan bintang-bintang jatuh lembut di latar langit malam (pengganti garis matrix)
+    // 1. Hujan bintang jatuh lembut di latar malam (lebih halus agar tidak menutupi teks/hati)
     starRainStreams.length = 0;
-    const colCount = Math.floor(window.innerWidth / 28);
+    const colCount = Math.floor(window.innerWidth / 34);
     for (let c = 0; c < colCount; c++) {
         starRainStreams.push({
-            x: c * 28 + Math.random() * 14,
+            x: c * 34 + Math.random() * 16,
             y: Math.random() * -window.innerHeight,
-            speed: 1.4 + Math.random() * 2.1,
-            length: 4 + Math.floor(Math.random() * 6),
+            speed: 1.2 + Math.random() * 1.7,
+            length: 3 + Math.floor(Math.random() * 4),
             phase: Math.random() * Math.PI * 2
         });
     }
 
-    // 2. Siapkan 420 kunang-kunang bercahaya untuk membentuk angka, kata, dan hati
+    // 2. Kunang-kunang diperbanyak & diperjelas ukurannya
     fireflies.length = 0;
-    const totalFlies = 420;
+    const totalFlies = 540;
     for (let i = 0; i < totalFlies; i++) {
         fireflies.push({
             x: Math.random() * window.innerWidth,
@@ -373,7 +389,7 @@ function initFireflyMorphEngine() {
             tx: window.innerWidth * 0.58,
             ty: window.innerHeight * 0.45,
             active: false,
-            size: Math.random() * 2.6 + 1.8,
+            size: Math.random() * 2.2 + 2.4,
             phase: Math.random() * Math.PI * 2,
             isPink: i % 2 === 0
         });
@@ -385,7 +401,7 @@ function initFireflyMorphEngine() {
         ctx.globalAlpha = alpha;
         ctx.fillStyle = color;
         ctx.shadowColor = color;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 6;
         ctx.beginPath();
         for (let k = 0; k < 4; k++) {
             const ang = (k * Math.PI) / 2;
@@ -402,33 +418,54 @@ function initFireflyMorphEngine() {
         ctx.restore();
     }
 
+    function drawFireflyGlow(ctx, x, y, radius, alpha, color, isFormed) {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+
+        // Aura cahaya kunang-kunang
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = isFormed ? 18 : 12;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Inti terang di tengah supaya bentuk huruf & hati lebih tegas
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#FFFDF9';
+        ctx.beginPath();
+        ctx.arc(x, y, radius * 0.46, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+    }
+
     function loopMorph() {
         tick += 0.045;
         fCtx.clearRect(0, 0, fCanvas.width, fCanvas.height);
 
-        // Gambar hujan bintang-bintang jatuh di latar malam
+        // Hujan bintang jatuh
         starRainStreams.forEach((st) => {
             st.y += st.speed;
-            if (st.y - st.length * 18 > fCanvas.height) {
+            if (st.y - st.length * 20 > fCanvas.height) {
                 st.y = -20;
                 st.x = Math.random() * fCanvas.width;
             }
             for (let s = 0; s < st.length; s++) {
-                const sy = st.y - s * 18;
+                const sy = st.y - s * 20;
                 if (sy < -10 || sy > fCanvas.height + 10) continue;
-                const fade = (1 - s / st.length) * (0.45 + 0.35 * Math.sin(tick + st.phase + s));
+                const fade = (1 - s / st.length) * (0.28 + 0.22 * Math.sin(tick + st.phase + s));
                 const starColor = s === 0 ? '#FFFDF7' : (s % 2 === 0 ? '#FFD166' : '#FF8FA3');
-                drawStarShape(fCtx, st.x, sy, s === 0 ? 4.4 : 3.0, Math.max(0.08, fade), starColor);
+                drawStarShape(fCtx, st.x, sy, s === 0 ? 3.8 : 2.6, Math.max(0.05, fade), starColor);
             }
         });
 
-        // Gambar & gerakkan kunang-kunang
+        // Kunang-kunang
         const { cx, cy } = getCenterTarget();
         const heartBeat = morphMode === 'heart' ? (1 + Math.sin(tick * 1.4) * 0.035) : 1;
 
         fireflies.forEach((f) => {
             if (morphMode === 'scatter' || !f.active) {
-                // Terbang melayang bebas seperti kunang-kunang
                 f.vx += (Math.random() - 0.5) * 0.25;
                 f.vy += (Math.random() - 0.5) * 0.25;
                 f.vx *= 0.96;
@@ -441,30 +478,25 @@ function initFireflyMorphEngine() {
                 if (f.y < 0) f.y = fCanvas.height;
                 if (f.y > fCanvas.height) f.y = 0;
             } else {
-                // Menyatu perlahan menuju formasi huruf atau hati
-                const goalX = cx + (f.tx - cx) * heartBeat + Math.sin(tick * 1.6 + f.phase) * 1.6;
-                const goalY = cy + (f.ty - cy) * heartBeat + Math.cos(tick * 1.5 + f.phase) * 1.6;
-                f.x += (goalX - f.x) * 0.11;
-                f.y += (goalY - f.y) * 0.11;
+                const goalX = cx + (f.tx - cx) * heartBeat + Math.sin(tick * 1.6 + f.phase) * 1.4;
+                const goalY = cy + (f.ty - cy) * heartBeat + Math.cos(tick * 1.5 + f.phase) * 1.4;
+                f.x += (goalX - f.x) * 0.12;
+                f.y += (goalY - f.y) * 0.12;
             }
 
-            const glowAlpha = 0.62 + Math.sin(tick * 2.2 + f.phase) * 0.35;
+            const glowAlpha = f.active
+                ? (0.82 + Math.sin(tick * 2.2 + f.phase) * 0.18)
+                : (0.52 + Math.sin(tick * 2.0 + f.phase) * 0.28);
+
             let flyColor = '#FFF3B0';
             if (morphMode === 'heart' && f.active) {
                 flyColor = f.isPink ? '#FF6B8B' : '#FFD166';
             } else if (f.active) {
-                flyColor = f.isPink ? '#FFFDF7' : '#FFD166';
+                flyColor = f.isPink ? '#FF8FA3' : '#FFD166';
             }
 
-            fCtx.save();
-            fCtx.globalAlpha = Math.max(0.18, glowAlpha);
-            fCtx.fillStyle = flyColor;
-            fCtx.shadowColor = flyColor;
-            fCtx.shadowBlur = morphMode === 'heart' ? 14 : 10;
-            fCtx.beginPath();
-            fCtx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
-            fCtx.fill();
-            fCtx.restore();
+            const drawRadius = f.active ? f.size * 1.25 : f.size;
+            drawFireflyGlow(fCtx, f.x, f.y, drawRadius, Math.max(0.18, glowAlpha), flyColor, f.active);
         });
 
         fireflyAnimId = requestAnimationFrame(loopMorph);
@@ -477,6 +509,21 @@ function morphFirefliesToWord(word) {
     const { cx, cy } = getCenterTarget();
     const pts = sampleTextPoints(word);
     morphMode = 'word';
+
+    const glowEl = document.getElementById('word-backdrop-glow');
+    if (glowEl) {
+        glowEl.style.left = cx + 'px';
+        glowEl.style.top = cy + 'px';
+        glowEl.textContent = word;
+        glowEl.classList.remove('hidden');
+        requestAnimationFrame(() => glowEl.classList.add('active-glow'));
+    }
+
+    const innerHeartText = document.getElementById('heart-inner-text');
+    if (innerHeartText) {
+        innerHeartText.style.left = cx + 'px';
+        innerHeartText.style.top = cy + 'px';
+    }
 
     fireflies.forEach((f, idx) => {
         if (idx < pts.length) {
@@ -491,6 +538,12 @@ function morphFirefliesToWord(word) {
 
 function scatterFirefliesBurst() {
     morphMode = 'scatter';
+    const glowEl = document.getElementById('word-backdrop-glow');
+    if (glowEl) {
+        glowEl.classList.remove('active-glow');
+        setTimeout(() => glowEl.classList.add('hidden'), 220);
+    }
+
     fireflies.forEach((f) => {
         if (f.active) {
             const ang = Math.random() * Math.PI * 2;
@@ -507,6 +560,12 @@ function morphFirefliesToHeart() {
     const pts = sampleHeartPoints();
     morphMode = 'heart';
 
+    const innerHeartText = document.getElementById('heart-inner-text');
+    if (innerHeartText) {
+        innerHeartText.style.left = cx + 'px';
+        innerHeartText.style.top = cy + 'px';
+    }
+
     fireflies.forEach((f, idx) => {
         const targetPt = pts[idx % pts.length];
         f.active = true;
@@ -517,6 +576,7 @@ function morphFirefliesToHeart() {
 
 /* Sekuens Malam Tersinkron dengan Detik Lagu (lagu1.mp3) */
 function prepareGrandFinale() {
+    syncDeviceLayoutMode();
     playTone(587, 0.22);
     document.getElementById('step-3').classList.add('hidden');
     document.getElementById('main-stage').classList.remove('wide-stage');
@@ -526,14 +586,12 @@ function prepareGrandFinale() {
     seqLayer.classList.remove('hidden');
     initFireflyMorphEngine();
 
-    // Mulai putar lagu1.mp3 dan catat waktu mulai sekuens
     startEndingMusic();
     const sequenceStartTime = performance.now();
 
     updateBuddyChat("🎈 Teman Balon", `Sstt... lihat kunang-kunang & bintang jatuh di langit, ${userName}! ✨`);
 
     const sequenceSteps = ["3", "2", "1", "Selamat", "Hari", "Anak", "Sedunia"];
-    // Bagi total waktu sebelum HEART_APPEAR_AT_SEC ke 7 kata secara merata & lebih pelan
     const totalPreHeartMs = Math.max(5600, HEART_APPEAR_AT_SEC * 1000);
     const perWordSlotMs = totalPreHeartMs / sequenceSteps.length;
     const holdDurationMs = perWordSlotMs * 0.72;
@@ -542,7 +600,6 @@ function prepareGrandFinale() {
 
     function runNextSequenceWord() {
         if (stepIdx >= sequenceSteps.length) {
-            // Tunggu tepat sampai detik HEART_APPEAR_AT_SEC sebelum merajut hati
             const elapsedMs = performance.now() - sequenceStartTime;
             const waitToHeartMs = Math.max(120, totalPreHeartMs - elapsedMs);
             setTimeout(() => {
@@ -556,31 +613,30 @@ function prepareGrandFinale() {
         playTone(stepIdx < 3 ? 523 + stepIdx * 65 : 698 + (stepIdx - 3) * 55, 0.16);
         stepIdx++;
 
-        // Tahan kata agar terbaca jelas, lalu buyar jadi kunang-kunang sebelum kata berikutnya
         setTimeout(() => {
             scatterFirefliesBurst();
             setTimeout(runNextSequenceWord, perWordSlotMs - holdDurationMs);
         }, holdDurationMs);
     }
 
-    // Jeda pembuka 450ms untuk hujan bintang jatuh sebelum angka "3" menyatu
     setTimeout(runNextSequenceWord, 450);
 }
 
 function revealHeartAndLanterns(sequenceStartTime) {
-    // 1. Kunang-kunang mulai merajut bentuk HATI
     morphFirefliesToHeart();
     playTone(1046, 0.28);
 
-    // 2. Setelah hati mulai terbentuk (~900ms), munculkan teks "You Are Awesome, [Name]!" di dalam hati
     setTimeout(() => {
-        document.getElementById('heart-inner-text').classList.remove('hidden');
+        const innerText = document.getElementById('heart-inner-text');
+        const { cx, cy } = getCenterTarget();
+        innerText.style.left = cx + 'px';
+        innerText.style.top = cy + 'px';
+        innerText.classList.remove('hidden');
         requestAnimationFrame(() => {
-            document.getElementById('heart-inner-text').classList.add('visible-heart-text');
+            innerText.classList.add('visible-heart-text');
         });
     }, 900);
 
-    // 3. Tepat di detik LANTERNS_RISE_AT_SEC, lampion mulai naik & dialog 2 anak + kartu ending muncul
     const elapsedMs = performance.now() - sequenceStartTime;
     const waitToLanternMs = Math.max(950, LANTERNS_RISE_AT_SEC * 1000 - elapsedMs);
 
@@ -619,13 +675,14 @@ function revealHeartAndLanterns(sequenceStartTime) {
     }, waitToLanternMs);
 }
 
-// Jalur lampion di sisi tengah-kanan agar tidak menutupi kartu kiri
+// Jalur lampion menyesuaikan otomatis apakah HP atau Laptop agar tidak menabrak elemen lain
 function spawnSingleSkyLantern(wishObj) {
     const layer = document.getElementById('sky-lanterns-layer');
     const lantern = document.createElement('div');
     lantern.className = 'sky-lantern';
 
-    const lanes = [42, 56, 70, 82];
+    const mobile = isMobileDevice();
+    const lanes = mobile ? [18, 42, 68, 84] : [42, 56, 70, 82];
     const baseLeft = lanes[laneIndex % lanes.length];
     laneIndex++;
     const leftPercent = baseLeft + (Math.random() * 4 - 2);
@@ -695,7 +752,8 @@ function sendWarmHug() {
     const hugBox = document.getElementById('hug-box');
     hugBox.style.display = 'block';
     hugBox.textContent = `🤗 Pelukan hangat tersimpan untuk ${userName}! Selamat Hari Anak Sedunia 💖`;
-    burstSparkles(window.innerWidth * 0.58, window.innerHeight * 0.44, 34);
+    const { cx, cy } = getCenterTarget();
+    burstSparkles(cx, cy, 34);
 }
 
 function triggerGrandFireworks() {
@@ -783,6 +841,7 @@ function renderParticles() {
 renderParticles();
 
 document.addEventListener('DOMContentLoaded', () => {
+    syncDeviceLayoutMode();
     const nameInput = document.getElementById('user-name-input');
     nameInput?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') startJourney();
