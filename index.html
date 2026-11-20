@@ -40,7 +40,6 @@
             <circle cx="246" cy="130" r="62" fill="rgba(56, 114, 112, 0.5)"/>
             <circle cx="144" cy="74" r="58" fill="rgba(72, 138, 130, 0.48)"/>
             <circle cx="216" cy="74" r="58" fill="rgba(72, 138, 130, 0.48)"/>
-            <!-- Bintang kecil di tajuk pohon malam -->
             <circle cx="135" cy="95" r="3.5" fill="#FFD166" class="tree-ember"/>
             <circle cx="215" cy="88" r="3" fill="#FF8FA3" class="tree-ember"/>
             <circle cx="178" cy="65" r="4" fill="#FFF3B0" class="tree-ember"/>
@@ -199,7 +198,6 @@
             </p>
 
             <div class="tree-workspace">
-                <!-- Kolom Kiri: Pohon Harapan yang Lebih Luas -->
                 <div class="tree-stage">
                     <svg viewBox="0 0 420 350" width="100%" height="100%">
                         <circle cx="210" cy="145" r="135" fill="#FFD166" opacity="0.16" class="tree-aura"/>
@@ -223,7 +221,6 @@
                     </div>
                 </div>
 
-                <!-- Kolom Kanan: Area Tulis & Kelola Harapan yang Lega -->
                 <div class="tree-side-panel">
                     <label for="wish-input" class="wish-label">✨ Tulis Harapanmu di Sini:</label>
                     <textarea class="wish-textarea" id="wish-input" rows="3" placeholder="Contoh: Semoga aku berani mengejar mimpiku dan selalu bahagia..." maxlength="65" oninput="reactTyping()"></textarea>
@@ -244,13 +241,10 @@
             </div>
         </div>
 
-        <!-- SEKUENS MALAM: 3 - 2 - 1 -> SELAMAT -> HARI -> ANAK -> SEDUNIA -> HATI BERTAHAN -->
+        <!-- CANVAS PARTIKEL KUNANG-KUNANG & HUJAN BINTANG (SEPERTI VIDEO CONTOH) -->
         <div class="finale-sequence-layer hidden" id="finale-sequence">
-            <div class="countdown-word" id="sequence-word"></div>
-            <div class="heart-showcase hidden" id="heart-showcase">
-                <canvas id="heart-canvas" width="380" height="340"></canvas>
-                <div class="heart-inner-text" id="heart-inner-text">You Are Awesome!</div>
-            </div>
+            <canvas id="firefly-morph-canvas"></canvas>
+            <div class="heart-inner-text hidden" id="heart-inner-text">You Are Awesome!</div>
         </div>
 
         <!-- STEP 4: ENDING RINGKAS & LEGA DI KIRI ATAS -->
