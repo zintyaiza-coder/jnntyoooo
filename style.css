@@ -200,16 +200,16 @@ body.night-magic .hill-front { background: #102321; }
 /* Tombol Musik */
 .music-pill {
     position: fixed;
-    top: 16px;
-    right: 18px;
+    top: 14px;
+    right: 14px;
     z-index: 40;
     border: none;
     border-radius: 999px;
-    padding: 9px 16px;
+    padding: 8px 14px;
     font-family: inherit;
     font-weight: 800;
-    font-size: 0.84rem;
-    background: rgba(255, 255, 255, 0.92);
+    font-size: 0.8rem;
+    background: rgba(255, 255, 255, 0.94);
     color: #2B2D42;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
     cursor: pointer;
@@ -287,12 +287,12 @@ body.night-magic .hill-front { background: #102321; }
 /* Kolom Komentar Obrolan Dua Anak */
 .buddy-chat-box {
     position: absolute;
-    bottom: 162px;
-    left: 8px;
-    width: 265px;
-    background: rgba(255, 255, 255, 0.95);
+    bottom: 152px;
+    left: 6px;
+    width: 260px;
+    background: rgba(255, 255, 255, 0.96);
     color: #2B2D42;
-    padding: 10px 14px;
+    padding: 9px 13px;
     border-radius: 18px;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
     border: 2px solid rgba(255, 209, 102, 0.7);
@@ -301,7 +301,7 @@ body.night-magic .hill-front { background: #102321; }
 }
 
 body.night-magic .buddy-chat-box {
-    background: rgba(29, 21, 61, 0.92);
+    background: rgba(29, 21, 61, 0.94);
     color: #F8F9FA;
     border-color: rgba(255, 209, 102, 0.45);
 }
@@ -311,10 +311,10 @@ body.night-magic .buddy-chat-box {
 }
 
 .chat-speaker {
-    font-size: 0.73rem;
+    font-size: 0.72rem;
     font-weight: 800;
     color: #E07A5F;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
 body.night-magic .chat-speaker {
@@ -322,9 +322,9 @@ body.night-magic .chat-speaker {
 }
 
 .chat-text {
-    font-size: 0.83rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    line-height: 1.4;
+    line-height: 1.35;
 }
 
 /* Panggung & Kartu Utama */
@@ -346,7 +346,7 @@ body.night-magic .stage {
 }
 
 .magic-card {
-    background: rgba(255, 255, 255, 0.93);
+    background: rgba(255, 255, 255, 0.94);
     backdrop-filter: blur(12px);
     border-radius: 28px;
     padding: 28px 24px;
@@ -362,7 +362,7 @@ body.night-magic .stage {
 }
 
 body.night-magic .magic-card {
-    background: rgba(23, 17, 48, 0.82);
+    background: rgba(23, 17, 48, 0.85);
     color: #F8F9FA;
     border: 1px solid rgba(255, 255, 255, 0.14);
 }
@@ -376,7 +376,7 @@ body.night-magic .magic-card {
     letter-spacing: 0.6px;
     padding: 5px 12px;
     border-radius: 999px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 h1 {
@@ -481,7 +481,7 @@ h1 {
     opacity: 0.76;
 }
 
-/* STEP 3: POHON HARAPAN LUAS (2 KOLOM) */
+/* STEP 3: POHON HARAPAN LUAS (2 KOLOM DI DESKTOP) */
 .tree-wide-card {
     padding: 26px 28px;
 }
@@ -503,9 +503,9 @@ h1 {
     position: relative;
     width: 100%;
     height: 340px;
-    background: linear-gradient(180deg, rgba(255, 248, 225, 0.55) 0%, rgba(199, 249, 204, 0.4) 100%);
+    background: linear-gradient(180deg, rgba(255, 248, 225, 0.65) 0%, rgba(199, 249, 204, 0.45) 100%);
     border-radius: 22px;
-    border: 2px dashed rgba(87, 204, 153, 0.45);
+    border: 2px dashed rgba(87, 204, 153, 0.5);
     overflow: hidden;
 }
 
@@ -526,14 +526,17 @@ h1 {
 
 .wish-lantern {
     position: absolute;
-    padding: 7px 12px;
-    border-radius: 14px;
-    font-size: 0.78rem;
+    padding: 6px 10px;
+    border-radius: 13px;
+    font-size: 0.74rem;
     font-weight: 800;
     color: #22223B;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.14);
     cursor: pointer;
-    max-width: 175px;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     animation: lanternPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), gentleBob 2.8s ease-in-out infinite alternate;
     transition: transform 0.2s ease;
 }
@@ -550,13 +553,13 @@ h1 {
 
 @keyframes gentleBob {
     from { transform: translateY(0) rotate(-2deg); }
-    to { transform: translateY(-6px) rotate(2deg); }
+    to { transform: translateY(-5px) rotate(2deg); }
 }
 
 .tree-side-panel {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 11px;
 }
 
 .wish-label {
@@ -567,11 +570,11 @@ h1 {
 
 .wish-textarea {
     width: 100%;
-    padding: 13px 15px;
+    padding: 12px 14px;
     border-radius: 16px;
     border: 2px solid #CBD5E1;
     font-family: inherit;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     font-weight: 700;
     resize: none;
     outline: none;
@@ -599,24 +602,24 @@ h1 {
 }
 
 .lantern-modal {
-    padding: 12px 14px;
+    padding: 11px 14px;
     border-radius: 15px;
-    background: rgba(255, 209, 102, 0.28);
+    background: rgba(255, 209, 102, 0.32);
     font-weight: 800;
-    font-size: 0.85rem;
-    line-height: 1.45;
+    font-size: 0.83rem;
+    line-height: 1.4;
     color: #3D2C00;
-    min-height: 54px;
+    min-height: 50px;
 }
 
 .finale-trigger-btn {
     width: 100%;
-    padding: 13px 16px;
-    font-size: 0.95rem;
-    margin-top: 4px;
+    padding: 12px 16px;
+    font-size: 0.94rem;
+    margin-top: 2px;
 }
 
-/* CANVAS KUNANG-KUNANG & HUJAN BINTANG */
+/* CANVAS KUNANG-KUNANG + TEKS SEKUENS JELAS + HATI */
 .finale-sequence-layer {
     position: fixed;
     inset: 0;
@@ -632,24 +635,27 @@ h1 {
     display: block;
 }
 
-/* Lapisan cahaya lembut di belakang kata kunang-kunang agar makin mudah terbaca */
-.word-backdrop-glow {
+/* Teks utama 3 - 2 - 1 -> Selamat -> Hari -> Anak -> Sedunia agar pasti jelas terbaca */
+.countdown-clear-word {
     position: fixed;
     top: 45%;
     left: 58%;
-    transform: translate(-50%, -50%) scale(0.92);
+    transform: translate(-50%, -50%) scale(0.84);
     font-family: 'Fredoka', sans-serif;
     font-weight: 700;
-    font-size: clamp(3.2rem, 7.2vw, 5.4rem);
-    color: rgba(255, 248, 231, 0.26);
-    text-shadow: 0 0 28px rgba(255, 143, 163, 0.55), 0 0 48px rgba(255, 209, 102, 0.3);
+    font-size: clamp(3.4rem, 7.5vw, 5.8rem);
+    color: #FFFDF9;
+    text-shadow:
+        0 0 18px rgba(255, 107, 139, 0.95),
+        0 0 38px rgba(255, 209, 102, 0.75),
+        0 4px 14px rgba(0, 0, 0, 0.75);
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.24s ease, transform 0.3s ease;
+    transition: opacity 0.2s ease, transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
     white-space: nowrap;
 }
 
-.word-backdrop-glow.active-glow {
+.countdown-clear-word.show-clear-word {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
 }
@@ -678,42 +684,50 @@ h1 {
 
 /* STEP 4: ENDING RINGKAS & LEGA */
 .ending-compact-card {
-    padding: 20px 20px;
+    padding: 18px 18px;
     text-align: left;
 }
 
 .ending-compact-card h1 {
-    font-size: 1.48rem;
-    margin-bottom: 8px;
+    font-size: 1.42rem;
+    margin-bottom: 6px;
 }
 
 .ending-mini-hope {
-    font-size: 0.9rem;
-    line-height: 1.5;
-    opacity: 0.94;
-    margin-bottom: 12px;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    opacity: 0.95;
+    margin-bottom: 8px;
     transition: opacity 0.25s ease;
+}
+
+.rotate-tip-mini {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #FFD166;
+    opacity: 0.9;
+    margin-bottom: 10px;
 }
 
 .hug-toast {
     display: none;
-    padding: 9px 12px;
+    padding: 8px 12px;
     border-radius: 13px;
     background: rgba(255, 209, 102, 0.2);
     color: #FFF3B0;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 800;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .ending-btn-row {
     justify-content: flex-start;
-    gap: 8px;
+    gap: 7px;
 }
 
 .ending-btn-row .btn-magic {
-    padding: 8px 12px;
-    font-size: 0.8rem;
+    padding: 7px 11px;
+    font-size: 0.78rem;
     border-radius: 12px;
 }
 
@@ -758,12 +772,12 @@ h1 {
 .lantern-dome {
     background: linear-gradient(180deg, #FFD166 0%, #F77F00 100%);
     color: #241300;
-    padding: 9px 13px;
+    padding: 8px 12px;
     border-radius: 26px 26px 12px 12px;
-    box-shadow: 0 0 26px rgba(255, 183, 3, 0.65);
-    max-width: 162px;
+    box-shadow: 0 0 24px rgba(255, 183, 3, 0.6);
+    max-width: 148px;
     text-align: center;
-    font-size: 0.76rem;
+    font-size: 0.72rem;
     font-weight: 800;
     display: flex;
     flex-direction: column;
@@ -771,32 +785,37 @@ h1 {
 }
 
 .lantern-author {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     opacity: 0.85;
 }
 
 .lantern-flame {
-    width: 10px;
-    height: 14px;
+    width: 9px;
+    height: 13px;
     border-radius: 50%;
     background: #FFF8D6;
-    box-shadow: 0 0 14px #FFD166;
+    box-shadow: 0 0 12px #FFD166;
     margin-top: 3px;
 }
 
-/* Mode Otomatis Terdeteksi HP (diatur otomatis oleh JS & media query) */
+/* ATURAN KHUSUS LAYAR HP POTRET (TERDETEKSI OTOMATIS) */
+body.device-mobile {
+    padding-bottom: 135px;
+}
+
 body.device-mobile .tree-workspace {
     grid-template-columns: 1fr;
+    gap: 14px;
 }
 
 body.device-mobile .tree-stage {
-    height: 245px;
+    height: 225px;
 }
 
 body.device-mobile.night-magic {
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 54px 12px 175px;
+    padding: 52px 12px 155px;
 }
 
 body.device-mobile.night-magic .stage {
@@ -804,57 +823,62 @@ body.device-mobile.night-magic .stage {
 }
 
 body.device-mobile .ending-compact-card {
-    padding: 14px 15px;
-    border-radius: 22px;
+    padding: 13px 14px;
+    border-radius: 20px;
 }
 
 body.device-mobile .ending-compact-card h1 {
-    font-size: 1.24rem;
+    font-size: 1.18rem;
 }
 
 body.device-mobile .ending-mini-hope {
-    font-size: 0.82rem;
-    margin-bottom: 10px;
+    font-size: 0.79rem;
+    margin-bottom: 6px;
 }
 
-body.device-mobile .word-backdrop-glow {
-    top: 56%;
+body.device-mobile .countdown-clear-word {
+    top: 58%;
     left: 50%;
-    font-size: clamp(2.4rem, 11.5vw, 3.6rem);
+    font-size: clamp(2.5rem, 11vw, 3.8rem);
 }
 
 body.device-mobile .heart-inner-text {
-    top: 56%;
+    top: 58%;
     left: 50%;
-    font-size: 1.08rem;
-    width: 175px;
+    font-size: 1rem;
+    width: 165px;
 }
 
 body.device-mobile .companions-dock {
-    bottom: 6px;
-    left: 8px;
-    transform: scale(0.68);
+    bottom: 4px;
+    left: 6px;
+    transform: scale(0.62);
     transform-origin: bottom left;
 }
 
 body.device-mobile .buddy-chat-box {
-    width: 250px;
-    bottom: 160px;
+    width: 240px;
+    bottom: 155px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) and (orientation: portrait) {
+    body {
+        padding-bottom: 135px;
+    }
+
     .tree-workspace {
         grid-template-columns: 1fr;
+        gap: 14px;
     }
 
     .tree-stage {
-        height: 245px;
+        height: 225px;
     }
 
     body.night-magic {
         align-items: flex-start;
         justify-content: flex-start;
-        padding: 54px 12px 175px;
+        padding: 52px 12px 155px;
     }
 
     body.night-magic .stage {
@@ -862,41 +886,72 @@ body.device-mobile .buddy-chat-box {
     }
 
     .ending-compact-card {
-        padding: 14px 15px;
-        border-radius: 22px;
+        padding: 13px 14px;
+        border-radius: 20px;
     }
 
     .ending-compact-card h1 {
-        font-size: 1.24rem;
+        font-size: 1.18rem;
     }
 
     .ending-mini-hope {
-        font-size: 0.82rem;
-        margin-bottom: 10px;
+        font-size: 0.79rem;
+        margin-bottom: 6px;
     }
 
-    .word-backdrop-glow {
-        top: 56%;
+    .countdown-clear-word {
+        top: 58%;
         left: 50%;
-        font-size: clamp(2.4rem, 11.5vw, 3.6rem);
+        font-size: clamp(2.5rem, 11vw, 3.8rem);
     }
 
     .heart-inner-text {
-        top: 56%;
+        top: 58%;
         left: 50%;
-        font-size: 1.08rem;
-        width: 175px;
+        font-size: 1rem;
+        width: 165px;
     }
 
     .companions-dock {
-        bottom: 6px;
-        left: 8px;
-        transform: scale(0.68);
+        bottom: 4px;
+        left: 6px;
+        transform: scale(0.62);
         transform-origin: bottom left;
     }
 
     .buddy-chat-box {
-        width: 250px;
-        bottom: 160px;
+        width: 240px;
+        bottom: 155px;
+    }
+}
+
+/* Jika HP dimiringkan ke LANDSCAPE, tata letak otomatis melebar seperti layar lebar */
+@media (max-height: 520px) and (orientation: landscape) {
+    body.night-magic {
+        padding: 12px 18px 12px;
+    }
+
+    body.night-magic .stage {
+        max-width: 310px;
+    }
+
+    .ending-compact-card {
+        padding: 12px 14px;
+    }
+
+    .ending-compact-card h1 {
+        font-size: 1.12rem;
+    }
+
+    .ending-mini-hope, .rotate-tip-mini {
+        font-size: 0.74rem;
+        margin-bottom: 6px;
+    }
+
+    .companions-dock {
+        transform: scale(0.58);
+        transform-origin: bottom left;
+        bottom: 2px;
+        left: 8px;
     }
 }
