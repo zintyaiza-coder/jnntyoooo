@@ -1,14 +1,15 @@
 // Bisa kamu isi nama panggilanmu di sini supaya jejak pengirimnya makin terasa
-const SENDER_NAME = ""; // contoh: "Zintya" (kosongkan jika ingin memakai teks umum)
+const SENDER_NAME = ""; // contoh: "Zintya"
 
 let userName = "Sahabat Hebat";
-let currentTrack = "none"; // "celebrate" | "bertaut" | "none"
+let currentTrack = "none";
 const userWishes = [
     { text: "Semoga semua anak bahagia", author: "Teman Kecil" }
 ];
 let lanternInterval = null;
 let quoteIdx = 0;
 let hopeIdx = 0;
+let laneIndex = 0;
 
 (function applySenderIdentity() {
     if (SENDER_NAME.trim()) {
@@ -22,7 +23,7 @@ let hopeIdx = 0;
 // Buat bintang malam untuk mode ending
 (function createNightStars() {
     const worldBg = document.getElementById('world-bg');
-    for (let i = 0; i < 48; i++) {
+    for (let i = 0; i < 52; i++) {
         const s = document.createElement('div');
         s.className = 'twinkle-star';
         const sz = Math.random() * 3.5 + 1.5;
@@ -46,9 +47,9 @@ function getKidMessages() {
 
 function getEndingHopes() {
     return [
-        `"Untuk ${userName} dan semua anak di luar sana: semoga kalian tumbuh dengan hati yang lapang, tawa yang merdeka, dan keberanian menjemput masa depan penuh cahaya. Jangan takut bermimpi besar!" 🌈💫`,
-        `"Harapanku untukmu, ${userName}: semoga kamu gak pernah merasa sendirian saat mengejar mimpimu. Kita semua di sini saling menguatkan dan bertaut bersama!" 🤗🏮`,
-        `"Teruslah bermain dengan gembira, belajar dengan rasa ingin tahu, dan menjaga kebaikan hatimu ya, ${userName}. Langkah kecilmu hari ini adalah awal cerita hebat esok hari!" ⭐🌱`
+        `"Untuk ${userName} dan semua anak: semoga kalian tumbuh dengan hati yang lapang, tawa yang merdeka, dan keberanian menjemput masa depan penuh cahaya!" 🌈💫`,
+        `"Harapanku untukmu, ${userName}: semoga kamu gak pernah merasa sendirian saat mengejar mimpimu. Kami di sini menemani dengan balon dan permen manis!" 🎈🍭`,
+        `"Teruslah bermain dengan gembira, belajar dengan rasa ingin tahu, dan menjaga kebaikan hatimu ya, ${userName}. Langkah kecilmu hari ini awal cerita hebat esok hari!" ⭐🌱`
     ];
 }
 
@@ -65,10 +66,10 @@ function playTone(freq = 587, dur = 0.18) {
         const ctx = new AudioCtx();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'triangle';
+        osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(freq * 1.35, ctx.currentTime + dur);
-        gain.gain.setValueAtTime(0.18, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.25, ctx.currentTime + dur);
+        gain.gain.setValueAtTime(0.14, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
         osc.connect(gain);
         gain.connect(ctx.destination);
@@ -77,32 +78,54 @@ function playTone(freq = 587, dur = 0.18) {
     } catch (err) {}
 }
 
-function playTrack(trackName) {
-    const celebrateAudio = document.getElementById('audio-celebrate');
-    const bertautAudio = document.getElementById('audio-bertaut');
+function fadeOutAndSwitch(fromAudio, toAudio, trackName) {
     const btn = document.getElementById('music-toggle');
-
-    const target = trackName === 'bertaut' ? bertautAudio : celebrateAudio;
-    const other = trackName === 'bertaut' ? celebrateAudio : bertautAudio;
-
-    other.pause();
-    other.currentTime = 0;
     currentTrack = trackName;
 
-    if (!target.querySelector('source')) {
-        btn.textContent = trackName === 'bertaut'
-            ? "🎵 Bertaut (Isi MP3 di HTML)"
-            : "🎵 Semua Aku Dirayakan (Isi MP3 di HTML)";
+    const startTarget = () => {
+        if (!toAudio.querySelector('source')) {
+            btn.textContent = trackName === 'bertaut'
+                ? "🎵 Bertaut (Isi MP3 di HTML)"
+                : "🎵 Semua Aku Dirayakan (Isi MP3 di HTML)";
+            return;
+        }
+        toAudio.volume = 1;
+        toAudio.play().then(() => {
+            btn.textContent = trackName === 'bertaut'
+                ? "🎵 Memutar: Bertaut"
+                : "🎵 Memutar: Semua Aku Dirayakan";
+        }).catch(() => {
+            btn.textContent = "🔇 Klik untuk Putar Lagu";
+        });
+    };
+
+    if (!fromAudio || fromAudio.paused) {
+        startTarget();
         return;
     }
 
-    target.play().then(() => {
-        btn.textContent = trackName === 'bertaut'
-            ? "🎵 Memutar: Bertaut"
-            : "🎵 Memutar: Semua Aku Dirayakan";
-    }).catch(() => {
-        btn.textContent = "🔇 Klik untuk Putar Lagu";
-    });
+    let vol = fromAudio.volume;
+    const fadeTimer = setInterval(() => {
+        vol = Math.max(0, vol - 0.12);
+        fromAudio.volume = vol;
+        if (vol <= 0.05) {
+            clearInterval(fadeTimer);
+            fromAudio.pause();
+            fromAudio.currentTime = 0;
+            fromAudio.volume = 1;
+            startTarget();
+        }
+    }, 90);
+}
+
+function playTrack(trackName) {
+    const celebrateAudio = document.getElementById('audio-celebrate');
+    const bertautAudio = document.getElementById('audio-bertaut');
+    if (trackName === 'bertaut') {
+        fadeOutAndSwitch(celebrateAudio, bertautAudio, 'bertaut');
+    } else {
+        fadeOutAndSwitch(bertautAudio, celebrateAudio, 'celebrate');
+    }
 }
 
 function handleMusic() {
@@ -127,28 +150,26 @@ function handleMusic() {
 }
 
 function cheerCharacter() {
-    const charEl = document.getElementById('kid-char');
-    charEl.classList.remove('excited');
-    void charEl.offsetWidth;
-    charEl.classList.add('excited');
+    const dockEl = document.getElementById('companions-dock');
+    dockEl.classList.remove('excited');
+    void dockEl.offsetWidth;
+    dockEl.classList.add('excited');
     playTone(740, 0.16);
-    burstSparkles(window.innerWidth / 2, 130, 18);
+    burstSparkles(150, window.innerHeight - 140, 16);
 
-    if (document.body.classList.contains('night-magic')) {
-        const notes = [
-            `🤗 Aku di sini menemanimu, ${userName}! Kamu gak sendirian!`,
-            `🏮 Lihat lampion bertuliskan namamu terbang tinggi, ${userName}!`,
-            `🌟 Kita bertaut dalam harapan, ${userName}!`
-        ];
-        document.getElementById('buddy-note').textContent = notes[Math.floor(Math.random() * notes.length)];
-    }
+    const notes = [
+        `🎈 Aku bawa balon & temanku bawa permen buat nemenin ${userName}!`,
+        `🍭 Manisnya permen ini buat nyemangatin ${userName} hari ini!`,
+        `🏮 Lihat ke kanan atas, ${userName}—lampion harapanmu terbang tinggi!`
+    ];
+    document.getElementById('buddy-note').textContent = notes[Math.floor(Math.random() * notes.length)];
 }
 
 function reactTyping() {
     const mouth = document.getElementById('kid-mouth');
-    mouth.setAttribute('d', 'M65 79 Q80 99 95 79 Z');
+    mouth.setAttribute('d', 'M85 97 Q98 114 111 97 Z');
     setTimeout(() => {
-        mouth.setAttribute('d', 'M67 80 Q80 96 93 80 Z');
+        mouth.setAttribute('d', 'M87 98 Q98 111 109 98 Z');
     }, 220);
 }
 
@@ -161,7 +182,7 @@ function startJourney() {
     document.getElementById('greeting-title').textContent = `Hai ${userName}, Kamu Dirayakan! 💖`;
     document.getElementById('voice-quote').textContent = getKidMessages()[0];
     document.getElementById('tree-title').textContent = `Pohon Harapan ${userName} 🌳`;
-    document.getElementById('buddy-note').textContent = `🤗 Aku tetap di sini menemanimu, ${userName}! Kamu gak sendirian!`;
+    document.getElementById('buddy-note').textContent = `🎈 Aku bawa balon & temanku bawa permen buat nemenin ${userName}!`;
     document.getElementById('ending-title').textContent = `Teruslah Bersinar, ${userName}! 🌟`;
     document.getElementById('ending-hope-label').textContent = `✨ Pesan Semangat & Harapan Untuk ${userName} ✨`;
     document.getElementById('ending-hope-text').textContent = getEndingHopes()[0];
@@ -170,9 +191,8 @@ function startJourney() {
     cheerCharacter();
     document.getElementById('step-1').classList.add('hidden');
     document.getElementById('step-2').classList.remove('hidden');
-    burstSparkles(window.innerWidth / 2, window.innerHeight / 2, 55);
+    burstSparkles(window.innerWidth / 2, window.innerHeight / 2, 48);
 
-    // Putar "Semua Aku Dirayakan" setelah nama diisi & kado dibuka
     playTrack('celebrate');
 }
 
@@ -195,7 +215,7 @@ function openTreeStep() {
     document.getElementById('step-3').classList.remove('hidden');
 }
 
-const lanternPalette = ['#FFCA3A', '#FF8FA3', '#90E0EF', '#C77DFF', '#B5E48C', '#FFB703'];
+const lanternPalette = ['#FFD166', '#FF8FA3', '#90E0EF', '#C77DFF', '#B5E48C', '#FFB703'];
 
 function showLanternMsg(msg) {
     const box = document.getElementById('lantern-modal');
@@ -234,16 +254,15 @@ function addLantern() {
     zone.appendChild(item);
     input.value = '';
     showLanternMsg(`"${val}" dari ${userName} — Sudah menggantung indah di Pohon Harapan!`);
-    burstSparkles(window.innerWidth / 2, window.innerHeight * 0.45, 36);
+    burstSparkles(window.innerWidth / 2, window.innerHeight * 0.45, 32);
 }
 
-// Jeda emosi sebelum masuk ke ending
 function prepareGrandFinale() {
     playTone(587, 0.22);
     document.getElementById('step-3').classList.add('hidden');
     document.getElementById('step-transition').classList.remove('hidden');
     document.getElementById('transition-text').textContent =
-        `Langit mulai bertabur bintang untuk ${userName}, lampion-lampion disalakan, dan alunan "Bertaut" pelan-pelan menemani...`;
+        `Langit mulai bertabur bintang untuk ${userName}, lampion-lampion disalakan, dan nadanya berubah pelan agar kita bisa merasakan kehangatan yang saling bertaut...`;
 
     document.body.classList.add('night-magic');
     playTrack('bertaut');
@@ -254,14 +273,18 @@ function prepareGrandFinale() {
     }, 2400);
 }
 
+// Lampion diarahkan naik di area tengah sampai kanan (46vw - 81vw) agar tidak tertumpuk kartu kiri
 function spawnSingleSkyLantern(wishObj) {
     const layer = document.getElementById('sky-lanterns-layer');
     const lantern = document.createElement('div');
     lantern.className = 'sky-lantern';
 
-    const leftPercent = 6 + Math.random() * 82;
-    const duration = 9.5 + Math.random() * 5.5;
-    const driftX = (Math.random() - 0.5) * 90;
+    const lanes = [46, 58, 70, 81];
+    const baseLeft = lanes[laneIndex % lanes.length];
+    laneIndex++;
+    const leftPercent = baseLeft + (Math.random() * 4 - 2);
+    const duration = 10.5 + Math.random() * 4.5;
+    const driftX = (Math.random() - 0.5) * 45;
 
     lantern.style.left = leftPercent + 'vw';
     lantern.style.setProperty('--drift-x', driftX + 'px');
@@ -301,12 +324,12 @@ function launchSkyLanternWave() {
     );
 
     const pool = [...userWishes, ...personalizedDefaults];
-    const count = Math.min(8, Math.max(5, pool.length));
+    const count = Math.min(6, Math.max(4, pool.length));
     for (let i = 0; i < count; i++) {
         setTimeout(() => {
             const pick = pool[i % pool.length];
             spawnSingleSkyLantern(pick);
-        }, i * 480);
+        }, i * 650);
     }
 }
 
@@ -329,7 +352,7 @@ function sendWarmHug() {
     const hugBox = document.getElementById('hug-box');
     hugBox.style.display = 'block';
     hugBox.textContent = `🤗 Pelukan hangat sudah tersimpan di hati untuk ${userName}! Selamat Hari Anak, kamu berharga! 💖`;
-    burstSparkles(window.innerWidth / 2, window.innerHeight * 0.6, 40);
+    burstSparkles(window.innerWidth * 0.65, window.innerHeight * 0.45, 36);
 }
 
 function goGrandFinale() {
@@ -350,7 +373,7 @@ function goGrandFinale() {
                 const pick = pool[Math.floor(Math.random() * pool.length)];
                 spawnSingleSkyLantern(pick);
             }
-        }, 2600);
+        }, 2800);
     }
 }
 
@@ -366,36 +389,36 @@ resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
 const particles = [];
-const palette = ['#FF595E', '#FFCA3A', '#8AC926', '#4CC9F0', '#C77DFF', '#FF9F1C', '#FFFFFF'];
+const palette = ['#FF6B6B', '#FFD166', '#80ED99', '#72EFDD', '#C77DFF', '#FFB703', '#FFFFFF'];
 
 window.addEventListener('pointermove', (e) => {
-    if (Math.random() > 0.45) return;
+    if (Math.random() > 0.5) return;
     particles.push({
         x: e.clientX,
         y: e.clientY,
-        vx: (Math.random() - 0.5) * 1.8,
-        vy: (Math.random() - 0.5) * 1.8 - 0.6,
+        vx: (Math.random() - 0.5) * 1.4,
+        vy: (Math.random() - 0.5) * 1.4 - 0.5,
         size: Math.random() * 4 + 2,
         color: palette[Math.floor(Math.random() * palette.length)],
-        alpha: 0.9,
-        gravity: 0.02,
-        fade: 0.025
+        alpha: 0.85,
+        gravity: 0.015,
+        fade: 0.022
     });
 });
 
 function burstSparkles(x, y, count) {
     for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 8 + 2;
+        const speed = Math.random() * 7 + 1.8;
         particles.push({
             x, y,
             vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed - 2,
-            size: Math.random() * 6 + 3,
+            vy: Math.sin(angle) * speed - 1.8,
+            size: Math.random() * 5.5 + 2.5,
             color: palette[Math.floor(Math.random() * palette.length)],
             alpha: 1,
-            gravity: 0.16,
-            fade: 0.015
+            gravity: 0.14,
+            fade: 0.014
         });
     }
 }
@@ -404,10 +427,10 @@ function triggerGrandFireworks() {
     for (let b = 0; b < 4; b++) {
         setTimeout(() => {
             playTone(440 + b * 120, 0.2);
-            const fx = canvas.width * (0.2 + Math.random() * 0.6);
-            const fy = canvas.height * (0.15 + Math.random() * 0.35);
-            burstSparkles(fx, fy, 60);
-        }, b * 450);
+            const fx = canvas.width * (0.5 + Math.random() * 0.4);
+            const fy = canvas.height * (0.16 + Math.random() * 0.34);
+            burstSparkles(fx, fy, 50);
+        }, b * 480);
     }
 }
 
